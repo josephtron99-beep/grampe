@@ -2,92 +2,175 @@
 <html lang="en" class="no-js" data-theme="carbon">
 <head>
   <meta charset="utf-8">
-  <script>document.documentElement.classList.remove("no-js");</script>
+  <script>
+    document.documentElement.classList.remove("no-js");
+    (function () { var t; try { t = localStorage.getItem("grampe-v3-theme"); } catch (e) {}
+      if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "carbon";
+      document.documentElement.setAttribute("data-theme", t); })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Overview · Grampe Wallet V3</title>
-  <meta name="description" content="Grampe wallet dashboard, version 3: overview of balances, assets, spending and portfolio.">
+  <title>Dashboard · Grampe Wallet V3</title>
+  <meta name="description" content="Grampe wallet dashboard: GCC price, cards, total balance, referral, wallet and history.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0A0A0B">
   <link rel="icon" href="../../assets/img/shield.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Design system: tokens (carbon theme) → components → V3 page -->
-  <link rel="stylesheet" href="../../assets/css/tokens.css?v=20261111g">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=20261111g">
-  <link rel="stylesheet" href="v3.css?v=20261111g">
+  <!-- Design system: tokens (carbon / light theme) → components → V3 page -->
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=20261111h">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=20261111h">
+  <link rel="stylesheet" href="v3.css?v=20261111h">
 </head>
 <body class="v3">
 
 <div class="glow-bg" aria-hidden="true"></div>
 
-<!-- ============ TOP BAR ============ -->
-<header class="top3">
-  <a href="index.html" class="logo3" aria-label="Grampe dashboard"><img src="../../assets/img/shield.svg" alt="" width="26" height="30"><span>Grampe<em>.wallet</em></span></a>
-  <div class="top3-right">
-    <button class="addr-pill" id="addrPill" title="Copy wallet address"><span class="coin coin-sm coin-ginr">₹</span><span class="mono" id="addrShort">0x4a7C…a1F3</span><svg class="ico"><use href="../../assets/img/icons.svg#i-copy"/></svg></button>
-    <span class="badge badge-primary demo3">Demo data</span>
-    <button class="icon3" aria-label="Settings" data-toast="Settings live in the full dashboard"><svg class="ico"><use href="../../assets/img/icons.svg#i-settings"/></svg></button>
-    <button class="icon3" aria-label="Notifications" data-toast="You're all caught up"><svg class="ico"><use href="../../assets/img/icons.svg#i-bell"/></svg><i class="dot3"></i></button>
-    <span class="avatar avatar-sm avatar-1" aria-label="Aarav Mehta">AM</span>
-  </div>
-</header>
+<!-- ============ TOP MENU ============ -->
+<header class="top3" id="top3">
+  <div class="top3-inner">
+    <a href="index.html" class="logo3" aria-label="Grampe dashboard"><img src="../../assets/img/shield.svg" alt="" width="28" height="32"><span>Grampe</span></a>
 
-<!-- ============ TABS (scroll-spy) ============ -->
-<nav class="tabs3" id="tabs3" aria-label="Dashboard pages">
-  <span class="tab3-ind" id="tabInd" aria-hidden="true"></span>
-  <a href="index.html" class="tab3 active" aria-current="page"><svg class="ico"><use href="../../assets/img/icons.svg#i-grid"/></svg><span>Overview</span></a>
-  <a href="exchange.html" class="tab3" data-soon="Exchange"><svg class="ico"><use href="../../assets/img/icons.svg#i-swap"/></svg><span>Exchange</span><em class="soon3">Soon</em></a>
-  <a href="earn.html" class="tab3" data-soon="Earn"><svg class="ico"><use href="../../assets/img/icons.svg#i-layers"/></svg><span>Earn</span><em class="soon3">Soon</em></a>
-  <a href="activity.html" class="tab3" data-soon="Activity"><svg class="ico"><use href="../../assets/img/icons.svg#i-list"/></svg><span>Activity</span><em class="soon3">Soon</em></a>
-</nav>
+    <nav class="nav3" id="nav3" aria-label="Main">
+      <span class="nav3-ind" id="navInd" aria-hidden="true"></span>
+      <a href="index.html" class="n3 active" aria-current="page">Dashboard</a>
+      <a href="wallet.html" class="n3" data-soon="Wallet">Wallet</a>
+      <a href="cards.html" class="n3" data-soon="Cards">Cards</a>
+      <a href="investment.html" class="n3" data-soon="Investment">Investment</a>
+      <a href="exchange.html" class="n3" data-soon="Exchange">Exchange</a>
+      <a href="transfer.html" class="n3" data-soon="Transfer">Transfer</a>
+    </nav>
 
-<main class="wrap3">
-
-  <!-- ============ OVERVIEW ============ -->
-  <section id="overview" class="sec3" aria-labelledby="ovTitle">
-    <div class="page3-head"><div><p class="caption" id="greet3">Welcome back</p><h1 id="ovTitle" class="sec3-title">Dashboard overview</h1></div><span class="caption" id="updated3"></span></div>
-    <div class="panel3">
-      <div class="panel3-head">
-        <div class="segmented" role="radiogroup" aria-label="Account">
-          <button role="radio" aria-checked="true" data-acct="wallet">Wallet</button>
-          <button role="radio" aria-checked="false" data-acct="card">Card</button>
-        </div>
-        
-        <div class="head-actions">
-          <button class="btn btn-sm btn-ghost3" id="addToken"><svg class="ico"><use href="../../assets/img/icons.svg#i-plus"/></svg>Add token</button>
-          <button class="btn btn-sm btn-ghost3" id="netBtn" aria-haspopup="listbox"><span id="netLabel">All networks</span><svg class="ico"><use href="../../assets/img/icons.svg#i-chevron-down"/></svg></button>
-        </div>
-      </div>
-
-      <div class="asset-row" id="assetRow"><!-- asset cards --></div>
-
-      <div class="stats3">
-        <div class="stat3"><span class="caption">Total balance</span><b class="t-mint money" id="sTotal">—</b><small><span class="caption">INR</span> <span class="chg-up" id="sTotalChg"></span></small></div>
-        <div class="stat3"><span class="caption">Spent · 30 days</span><b class="t-red money" id="sSpent">—</b><small class="caption">Sends, UPI &amp; gift cards</small></div>
-        <div class="stat3"><span class="caption">Received · 30 days</span><b class="money" id="sRecv">—</b><small class="caption">From users &amp; addresses</small></div>
-      </div>
-
-      <div class="viz-row">
-        <div class="viz3">
-          <div class="viz3-head"><b>Monthly UPI limit</b><span class="caption" id="gaugeText">—</span></div>
-          <div class="gauge" id="gauge"></div>
-        </div>
-        <div class="viz3">
-          <div class="viz3-head"><b>Portfolio</b><span class="caption">by value</span></div>
-          <div class="donut3-wrap"><div class="donut3" id="donut3"></div><ul class="legend3" id="legend3"></ul></div>
+    <div class="top3-right">
+      <a class="btn btn-sm btn-dl" href="../../download.html"><svg class="ico"><use href="../../assets/img/icons.svg#i-download"/></svg><span>Download</span></a>
+      <button class="icon3 hide-sm" aria-label="Gift vouchers" data-toast="Gift vouchers page is coming next"><svg class="ico"><use href="../../assets/img/icons.svg#i-gift"/></svg></button>
+      <button class="lang3 hide-sm" id="langBtn" aria-label="Language: English"><svg class="ico"><use href="../../assets/img/icons.svg#i-globe"/></svg>EN<svg class="ico chev"><use href="../../assets/img/icons.svg#i-chevron-down"/></svg></button>
+      <button class="icon3 theme3" id="themeBtn" aria-label="Switch to light mode" title="Light / dark mode"><svg class="ico sun"><use href="../../assets/img/icons.svg#i-sun"/></svg><svg class="ico moon"><use href="../../assets/img/icons.svg#i-moon"/></svg></button>
+      <button class="icon3" aria-label="Notifications" data-toast="You're all caught up"><svg class="ico"><use href="../../assets/img/icons.svg#i-bell"/></svg><i class="dot3"></i></button>
+      <div class="user3">
+        <button class="avatar-btn" id="userBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu"><img src="../../assets/img/shield.svg" alt="" width="22" height="25"><svg class="ico chev"><use href="../../assets/img/icons.svg#i-chevron-down"/></svg></button>
+        <div class="menu3" id="userMenu" role="menu" hidden>
+          <div class="menu3-head"><b id="userName">Aarav Mehta</b><small id="userId">ID 100245</small></div>
+          <a role="menuitem" href="../#/profile"><svg class="ico"><use href="../../assets/img/icons.svg#i-user"/></svg>My profile</a>
+          <a role="menuitem" href="../#/security"><svg class="ico"><use href="../../assets/img/icons.svg#i-lock"/></svg>Update password</a>
+          <a role="menuitem" href="../#/wallet"><svg class="ico"><use href="../../assets/img/icons.svg#i-wallet"/></svg>Wallet</a>
+          <hr>
+          <a role="menuitem" href="../"><svg class="ico"><use href="../../assets/img/icons.svg#i-sidebar"/></svg>V1 layout</a>
+          <a role="menuitem" href="../v2/"><svg class="ico"><use href="../../assets/img/icons.svg#i-star"/></svg>V2 layout</a>
+          <hr>
+          <a role="menuitem" href="../../index.html" class="danger3"><svg class="ico"><use href="../../assets/img/icons.svg#i-logout"/></svg>Logout</a>
         </div>
       </div>
     </div>
+  </div>
+</header>
+
+<main class="wrap3" id="main">
+
+  <!-- greeting -->
+  <section class="hello3 rise" aria-labelledby="helloTitle">
+    <div><h1 id="helloTitle"><span id="greet3">Good evening</span>, <span id="firstName">Aarav</span> <span class="wave" aria-hidden="true">👋</span></h1><p class="caption">Check live GCC price before you swap.</p></div>
+    <div class="hello3-actions">
+      <a class="btn btn-sec3" href="../#/receive"><svg class="ico"><use href="../../assets/img/icons.svg#i-receive"/></svg>Receive</a>
+      <a class="btn btn-primary" href="../#/send"><svg class="ico"><use href="../../assets/img/icons.svg#i-send"/></svg>Send</a>
+    </div>
   </section>
 
-  <footer class="foot3"><span>Grampe · Dashboard V3 · Overview</span><span>Other layouts: <a href="../">V1</a> · <a href="../v2/">V2</a></span></footer>
+  <!-- GCC / USD price chart -->
+  <section class="card3 chart3 rise" aria-labelledby="chartTitle">
+    <div class="chart3-head">
+      <h2 id="chartTitle" class="h3s"><svg class="ico"><use href="../../assets/img/icons.svg#i-chart"/></svg>GCC/USD Price Chart</h2>
+      <div class="chart3-price"><span class="price-pill"><span class="coin coin-sm coin-gcc">G</span>1 GCC = <b id="pPrice">$1.2100</b> USD</span><span class="chg-pill" id="pChg">▲ 2.40%</span></div>
+      <div class="segmented seg-xs" role="radiogroup" aria-label="Chart range" id="ranges">
+        <button role="radio" aria-checked="false" data-r="1D">1D</button><button role="radio" aria-checked="false" data-r="1W">1W</button><button role="radio" aria-checked="false" data-r="1M">1M</button><button role="radio" aria-checked="false" data-r="3M">3M</button><button role="radio" aria-checked="true" data-r="1Y">1Y</button>
+      </div>
+    </div>
+    <div class="bigchart" id="bigchart"></div>
+    <p class="caption chart3-foot"><svg class="ico"><use href="../../assets/img/icons.svg#i-refresh"/></svg>Last updated: <span id="updated3"></span></p>
+  </section>
+
+  <!-- cards + total balance -->
+  <div class="row3 row3-a">
+    <section class="card3 cards3 rise" aria-labelledby="cardsTitle">
+      <div class="card3-head"><h2 id="cardsTitle" class="h3s">My Cards</h2><button class="icon3 icon3-sm" aria-label="Card options" data-toast="Card options open on the Cards page"><svg class="ico"><use href="../../assets/img/icons.svg#i-more"/></svg></button></div>
+      <p class="updated-pill"><svg class="ico"><use href="../../assets/img/icons.svg#i-refresh"/></svg>Last update: <span id="cardUpd"></span></p>
+      <div class="mycard">
+        <div class="mini-card" aria-hidden="true"><span class="mc-chip"></span><span class="mc-brand">RuPay</span></div>
+        <div class="mycard-info"><span class="caption">Virtual card</span><b>•••• 1743</b><span class="money" id="cardBal">$0.00</span></div>
+        <div class="mycard-tools">
+          <button class="icon3 icon3-sm" id="freezeBtn" aria-pressed="false" aria-label="Freeze card"><svg class="ico"><use href="../../assets/img/icons.svg#i-snow"/></svg></button>
+          <button class="icon3 icon3-sm" id="lockBtn" aria-pressed="false" aria-label="Lock online payments"><svg class="ico"><use href="../../assets/img/icons.svg#i-lock"/></svg></button>
+        </div>
+      </div>
+      <a class="btn btn-dark3 btn-block" href="../#/cards"><svg class="ico"><use href="../../assets/img/icons.svg#i-plus"/></svg>Send Money to Card</a>
+    </section>
+
+    <section class="card3 acct3 rise" aria-labelledby="acctTitle">
+      <div class="acct3-grid">
+        <div>
+          <h2 id="acctTitle" class="h3s">My Account / Total Balance</h2>
+          <p class="bal3"><img src="../../assets/img/shield.svg" alt="" width="34" height="38"><b class="money" id="ginrBal">0.00</b><button class="icon3 icon3-xs" id="eyeBtn" aria-label="Hide balance" aria-pressed="false"><svg class="ico"><use href="../../assets/img/icons.svg#i-eye"/></svg></button><span class="tip-host"><button class="icon3 icon3-xs" aria-describedby="balTip" aria-label="About this balance"><svg class="ico"><use href="../../assets/img/icons.svg#i-info"/></svg></button><span class="tip-bubble" id="balTip" role="tooltip">GINR balance. 1 GINR = ₹1 on Gram Chain.</span></span></p>
+          <p class="usd3 money" id="usdBal">$0.00</p>
+        </div>
+        <div class="detail3">
+          <h3 class="h3s">Balance detail</h3>
+          <p class="caption">Check your funds instantly</p>
+          <div class="detail3-row"><div class="bar3"><i id="balBar"></i></div><b class="money" id="detailBal">$0.00</b></div>
+          <ul class="detail3-list" id="detailList"></ul>
+        </div>
+      </div>
+      <div class="ref3">
+        <span class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="../../assets/img/icons.svg#i-card"/></svg></span>
+        <span class="ref3-text"><b>Your Referral ID</b><small class="mono" id="refLink"></small></span>
+        <button class="btn btn-sm btn-ink3" id="refCopy">Copy</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- promos -->
+  <div class="row3 row3-b">
+    <a class="card3 promo3 rise" href="../#/swap">
+      <div><p class="caption">Acme Investment</p><h2 class="h3s">Invest &amp; Grow Wallet</h2><span class="btn btn-sm btn-ink3">Swap</span></div>
+      <div class="art3 art-invest" aria-hidden="true"><span class="coin coin-lg coin-bnb">B</span><span class="coin coin-lg coin-usdt">$</span><span class="coin coin-xl coin-gcc">G</span><svg viewBox="0 0 120 70"><path d="M5 60 L35 42 L55 50 L85 20 L115 10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="115" cy="10" r="6" fill="currentColor"/></svg></div>
+    </a>
+    <a class="card3 promo3 rise" href="../#/receive">
+      <div><p class="caption">Exchange</p><h2 class="h3s">Add Fund to your wallet</h2><span class="btn btn-sm btn-ink3">Add Fund</span></div>
+      <div class="art3 art-wallet" aria-hidden="true"><span class="wallet3"><i></i></span><span class="coin coin-xl coin-usdt">$</span><span class="coin coin-xl coin-eth">Ξ</span></div>
+    </a>
+  </div>
+
+  <!-- wallet / history -->
+  <section class="card3 list3 rise" aria-label="Wallet and history">
+    <div class="list3-head">
+      <div class="tabs-line" role="tablist" aria-label="Wallet or history">
+        <button role="tab" aria-selected="true" aria-controls="listBody" id="tWallet" data-tab="wallet">Wallet</button>
+        <button role="tab" aria-selected="false" aria-controls="listBody" id="tHistory" data-tab="history" tabindex="-1">History</button>
+      </div>
+      <div class="list3-tools">
+        <label class="select3"><span class="vh">Network</span><select id="netSel"><option value="all">All networks</option></select><svg class="ico"><use href="../../assets/img/icons.svg#i-chevron-down"/></svg></label>
+        <span class="avail3">Available balance <b class="money" id="avail">$0.00</b></span>
+      </div>
+    </div>
+    <div id="listBody" role="tabpanel" aria-labelledby="tWallet"></div>
+  </section>
+
+  <footer class="foot3"><span>© <span id="yr">2026</span> Grampe</span><span>Crypto assets carry risk. GINR is a digital token on Gram Chain.</span></footer>
 </main>
+
+<!-- bottom bar (phones), same items as the live app -->
+<nav class="bar3b" aria-label="Quick links">
+  <a href="index.html" class="active" aria-current="page"><svg class="ico"><use href="../../assets/img/icons.svg#i-home"/></svg>Home</a>
+  <a href="wallet.html" data-soon="Wallet"><svg class="ico"><use href="../../assets/img/icons.svg#i-wallet"/></svg>Wallet</a>
+  <a href="cards.html" data-soon="Rupay Card"><svg class="ico"><use href="../../assets/img/icons.svg#i-card"/></svg>Rupay Card</a>
+  <a href="upi.html" data-soon="UPI-Transfer"><svg class="ico"><use href="../../assets/img/icons.svg#i-bolt"/></svg>UPI-Transfer</a>
+  <a href="staking.html" data-soon="Staking"><svg class="ico"><use href="../../assets/img/icons.svg#i-layers"/></svg>Staking</a>
+  <a href="gifts.html" data-soon="Gift Voucher"><svg class="ico"><use href="../../assets/img/icons.svg#i-gift"/></svg>Gift Voucher</a>
+</nav>
 
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
-<script src="../data.js?v=20261111g" defer></script>
-<script src="shell.js?v=20261111g" defer></script>
-<script src="overview.js?v=20261111g" defer></script>
+<script src="../data.js?v=20261111h" defer></script>
+<script src="shell.js?v=20261111h" defer></script>
+<script src="overview.js?v=20261111h" defer></script>
 </body>
 </html>

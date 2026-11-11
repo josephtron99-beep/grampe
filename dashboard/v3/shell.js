@@ -1,7 +1,7 @@
 /* ==========================================================
    Grampe dashboard V3 — shared shell for every V3 page
-   Top bar, page tabs (glow indicator), toasts, helpers.
-   Exposes window.G3 for page scripts (overview.js, …).
+   Top menu (sliding underline), light/dark theme, user menu,
+   toasts and helpers. Exposes window.G3 for page scripts.
    ========================================================== */
 (function () {
   "use strict";
@@ -10,65 +10,82 @@
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var nf = function (dp) { return new Intl.NumberFormat("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
+  var nfUS = function (dp) { return new Intl.NumberFormat("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
+  var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .08 }) : null;
 
   var G = {
     D: D, $: $, $$: $$, reduce: reduce,
     assets: JSON.parse(JSON.stringify(D.assets)),
     ico: function (id) { return '<svg class="ico" aria-hidden="true"><use href="' + ICON + id + '"/></svg>'; },
     num: function (v, dp) { return nf(dp == null ? 2 : dp).format(v || 0); },
-    inr: function (usd) { return "₹" + G.num(usd * D.usdInr, 2); },
+    usd: function (v, dp) { return "$" + nfUS(dp == null ? 2 : dp).format(v || 0); },
     key: function (a) { return a.key || a.sym; },
     label: function (a) { return a.key || a.sym; },
     asset: function (k) { return G.assets.filter(function (a) { return G.key(a) === k; })[0]; },
     net: function (id) { return D.networks.filter(function (n) { return n.id === id; })[0] || { name: id }; },
     total: function () { return G.assets.reduce(function (s, a) { return s + a.bal * a.price; }, 0); },
-    series: function (seedStr, n, end, vol, trend) {
-      var seed = 7; for (var i = 0; i < seedStr.length; i++) seed = (seed * 31 + seedStr.charCodeAt(i)) % 233280;
-      var rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-      var p = [end]; for (var j = 1; j < n; j++) p.unshift(p[0] * (1 - trend / n / 100 + (rnd() - .5) * vol)); return p;
-    },
     countTo: function (el, to, fmt, ms) {
       if (!el) return; var from = parseFloat(el.dataset.v || 0); el.dataset.v = to;
       if (reduce) { el.textContent = fmt(to); return; }
-      var st = null; (function step(t) { if (!st) st = t; var p = Math.min((t - st) / (ms || 900), 1); el.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); })(performance.now());
+      var st = null; (function step(t) { if (!st) st = t; var p = Math.min((t - st) / (ms || 1000), 1); el.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); })(performance.now());
     },
-    toast: function (msg, action) {
+    toast: function (msg) {
       var t = document.createElement("div"); t.className = "toast-item";
       t.innerHTML = '<span class="icon-tile icon-tile-sm icon-tile-round tone-accent">' + G.ico("i-check") + "</span><span>" + msg + "</span>";
-      if (action) { var b = document.createElement("button"); b.className = "link-btn"; b.style.pointerEvents = "auto"; b.style.marginLeft = "8px"; b.textContent = action.label; b.onclick = function () { action.run(); t.remove(); }; t.appendChild(b); }
       $("#toasts").appendChild(t);
-      setTimeout(function () { t.classList.add("out"); setTimeout(function () { t.remove(); }, 400); }, action ? 4500 : 2600);
+      setTimeout(function () { t.classList.add("out"); setTimeout(function () { t.remove(); }, 400); }, 2600);
     },
     copy: function (text, what) {
       var ok = function () { G.toast(what + " copied"); };
       if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, function () { G.toast("Copy not available here"); });
       else G.toast("Copy not available here");
     },
-    reveal: function (root) {
-      $$(".rise", root).forEach(function (el, i) { el.style.transitionDelay = (i * 70) + "ms"; if (io && !reduce) io.observe(el); else el.classList.add("in"); });
-    }
+    reveal: function (root) { $$(".rise", root).forEach(function (el, i) { el.style.transitionDelay = Math.min(i * 70, 420) + "ms"; if (io && !reduce) io.observe(el); else el.classList.add("in"); }); },
+    onTheme: []
   };
-  var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .1 }) : null;
   window.G3 = G;
 
-  /* ---------- top bar ---------- */
-  var main = G.asset("GINR");
-  $("#addrShort").textContent = main.addr.slice(0, 6) + "…" + main.addr.slice(-4);
-  $("#addrPill").addEventListener("click", function () { G.copy(main.addr, "Wallet address"); });
-  $$("[data-toast]").forEach(function (b) { b.addEventListener("click", function () { G.toast(b.dataset.toast); }); });
+  /* ---------- light / dark theme ---------- */
+  var root = document.documentElement, btn = $("#themeBtn"), meta = $('meta[name="theme-color"]');
+  function applyTheme(t, animate) {
+    if (animate && !reduce) { document.body.classList.add("theme-anim"); setTimeout(function () { document.body.classList.remove("theme-anim"); }, 400); }
+    root.setAttribute("data-theme", t);
+    var dark = t === "carbon";
+    btn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    btn.innerHTML = G.ico(dark ? "i-sun" : "i-moon"); // re-render so the icon spins in
+    if (meta) meta.setAttribute("content", dark ? "#0A0A0B" : "#F3F6FB");
+    try { localStorage.setItem("grampe-v3-theme", t); } catch (e) {}
+    G.onTheme.forEach(function (fn) { fn(t); });
+  }
+  btn.addEventListener("click", function () { applyTheme(root.getAttribute("data-theme") === "carbon" ? "light" : "carbon", true); });
+  applyTheme(root.getAttribute("data-theme") || "carbon", false);
 
-  /* ---------- page tabs: glow sits on the current page, follows hover ---------- */
-  var tabs = $$(".tab3"), ind = $("#tabInd"), current = $(".tab3.active") || tabs[0];
-  function place(tab) { var n = $("#tabs3").getBoundingClientRect(), r = tab.getBoundingClientRect(); ind.style.width = r.width + "px"; ind.style.transform = "translateX(" + (r.left - n.left) + "px)"; }
-  tabs.forEach(function (t) {
-    if (window.matchMedia("(hover: hover)").matches) { t.addEventListener("mouseenter", function () { place(t); }); }
-    t.addEventListener("click", function (e) {
-      if (t.dataset.soon) { e.preventDefault(); place(current); G.toast(t.dataset.soon + " page is coming next"); }
-    });
+  /* ---------- top menu: underline sits on the current page, follows hover ---------- */
+  var nav = $("#nav3"), ind = $("#navInd"), current = $(".n3.active");
+  function place(a) { if (!a || !ind) return; var n = nav.getBoundingClientRect(), r = a.getBoundingClientRect(); ind.style.width = (r.width - 16) + "px"; ind.style.transform = "translateX(" + (r.left - n.left + 8) + "px)"; }
+  if (nav) {
+    $$(".n3", nav).forEach(function (a) { a.addEventListener("mouseenter", function () { place(a); }); a.addEventListener("focus", function () { place(a); }); });
+    nav.addEventListener("mouseleave", function () { place(current); });
+    window.addEventListener("resize", function () { place(current); });
+    window.addEventListener("load", function () { place(current); });
+    place(current);
+  }
+
+  /* pages that are not built yet */
+  document.addEventListener("click", function (e) {
+    var s = e.target.closest("[data-soon]");
+    if (s) { e.preventDefault(); place(current); G.toast(s.dataset.soon + " page is coming next"); return; }
+    var t = e.target.closest("[data-toast]");
+    if (t) { G.toast(t.dataset.toast); }
   });
-  $("#tabs3").addEventListener("mouseleave", function () { place(current); });
-  window.addEventListener("resize", function () { place(current); });
-  place(current);
+  $("#langBtn") && $("#langBtn").addEventListener("click", function () { G.toast("More languages are coming soon"); });
 
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { var p = $(".pick3, .netpop"); if (p) p.remove(); } });
+  /* ---------- user menu ---------- */
+  var ub = $("#userBtn"), um = $("#userMenu");
+  function closeMenu() { um.hidden = true; ub.setAttribute("aria-expanded", "false"); }
+  ub.addEventListener("click", function (e) { e.stopPropagation(); var open = um.hidden; um.hidden = !open; ub.setAttribute("aria-expanded", String(open)); if (open) $("a", um).focus(); });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".user3")) closeMenu(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !um.hidden) { closeMenu(); ub.focus(); } });
+  $("#userName").textContent = D.user.name; $("#userId").textContent = "ID " + D.user.id;
+  var yr = $("#yr"); if (yr) yr.textContent = new Date().getFullYear();
 })();
