@@ -47,6 +47,11 @@
   --avatar-1: #8B7CF6; --avatar-2: #F59E0B; --avatar-3: #10B981;
   --avatar-4: #EC4899; --avatar-5: #2F3BFF; --avatar-6: #F97316;
 
+  /* asset marks (dashboard) */
+  --asset-eth: #627EEA; --asset-bnb: #F3BA2F; --asset-ton: #0098EA;
+  --asset-usdt: #26A17B; --asset-xlm: #14181F; --asset-shop: #7B4DFF;
+  --gold-300: #F6D58A; --gold-600: #C9963A;   /* card chip */
+
   /* ---------- Colour: semantic (use these in components) ---------- */
   --color-bg: var(--gray-50);
   --color-surface: var(--white);

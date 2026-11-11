@@ -26,6 +26,14 @@ Open http://localhost:5510
 2. In Vercel: New Project, import the repo, Framework preset **Other**, no build command, output directory = root.
 3. Deploy.
 
+## Dashboard (`/dashboard`)
+Signed-in wallet app built on the same design system. Open `dashboard/index.html` (locally: http://localhost:5510/dashboard/).
+- `index.html` app shell · `dashboard.css` layout · `app.js` router, pages and flows · `data.js` **demo data**
+- Pages (hash links): `#/home` `#/wallet` `#/history` `#/send` `#/receive` `#/swap` `#/transfer` `#/upi` `#/cards` `#/staking` `#/gifts` `#/referral` `#/profile` `#/security`
+- Mirrors the live grampe.co wallet: 9 assets, 7 networks, swap rule (GCC only from USDT), UPI with OTP, RuPay virtual card, gift cards, profile, password.
+- Not connected to the backend: balances, history and fees are fictional and saved in the browser (`localStorage`). Replace `data.js` and the flow handlers in `app.js` with API calls to go live.
+- Extras: Ctrl K command palette, hide balances, INR/USD, collapsible sidebar, bottom tab bar + quick-action button on phones.
+
 ## Design system
 Every page loads `tokens.css` → `components.css` → its own page file (e.g. `home.css`).
 - No hex colours or one-off pixel sizes in components or page files; use tokens.
