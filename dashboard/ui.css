@@ -297,3 +297,86 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
 /* ---------- Forms ---------- */
 .form-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .ui .form-grid { gap: 16px; }
+
+/* ==========================================================
+   SPACING SYSTEM (shadcn rhythm: 4 · 8 · 12 · 16 · 20 · 24 · 32)
+   page sections 24 · card padding 24 · card header → body 20
+   field → field 20 · label → control 8 · control → hint 6
+   ========================================================== */
+.ui { --grid-gap: 16px; }
+@media (min-width: 640px) { .ui { --grid-gap: 24px; } }
+
+/* page + headings */
+.ui .page-head { align-items: center; gap: 16px; margin-bottom: 0; }
+.ui .page-head .sub, .ui .card .sub { margin-top: 6px; font-size: 14px; line-height: 1.55; }
+.ui .h2 { font-size: clamp(28px, 4vw, 34px); font-weight: var(--fw-semibold); letter-spacing: -0.02em; }
+.ui .h3 { font-size: 20px; font-weight: var(--fw-semibold); letter-spacing: -0.01em; line-height: 1.3; }
+.ui .caption { font-size: 13px; }
+.ui .title { font-size: 15px; font-weight: var(--fw-semibold); }
+.ui .fine-print { margin-top: 0; font-size: 13px; text-align: center; }
+
+/* one column inside the 800px content area; button pairs keep their inline columns */
+.ui .view .grid-2, .ui .view .grid-main { grid-template-columns: 1fr; gap: var(--grid-gap); }
+.ui .stack { gap: var(--grid-gap); }
+.ui .narrow { max-width: 600px; width: 100%; }
+
+/* cards */
+.ui .box { padding: 20px; }
+@media (min-width: 640px) { .ui .box { padding: 24px; } }
+.ui .card-header, .ui .section-title { margin-bottom: 20px; }
+.ui .card-desc { line-height: 1.45; }
+
+/* forms */
+.ui .form-grid { gap: 20px; }
+.ui .input-group { gap: 8px; }
+.ui .input-group .input-hint, .ui .input-group .amount-meta { margin-top: -2px; }
+.ui .input-label { font-size: 14px; font-weight: var(--fw-medium); line-height: 1.2; }
+.ui .flow { gap: 20px; }
+.ui .flow-head { gap: 12px; padding-bottom: 4px; }
+.ui .asset-pick { min-height: 60px; padding: 10px 12px; gap: 12px; border-width: 1px; border-radius: var(--ui-radius-md); box-shadow: var(--ui-shadow-xs); }
+.ui .amount-meta { font-size: 13px; }
+.ui .quick-amounts { gap: 8px; }
+.ui .strength { margin-top: -8px; }
+.ui .rules { gap: 6px; font-size: 13px; margin-top: -8px; }
+.ui .profile-head { gap: 16px; margin-bottom: 24px; }
+.ui .profile-head .avatar { width: 56px; height: 56px; font-size: 18px; }
+.ui .form-actions { padding-top: 4px; }
+
+/* lists + rows */
+.ui .row-item { min-height: 60px; padding: 10px 12px; gap: 12px; }
+.ui .row-main, .ui .row-end { gap: 2px; line-height: 1.3; }
+.ui .toolbar { margin-bottom: 12px; }
+.ui .chip-row { gap: 8px; margin-bottom: 8px; }
+.ui .date-group { margin: 20px 12px 6px; font-size: 12px; font-weight: var(--fw-medium); color: var(--sc-muted-fg); }
+.ui .date-group:first-child { margin-top: 4px; }
+
+/* summaries, notes, address, qr */
+.ui .summary { gap: 12px; padding: 16px; border-radius: var(--ui-radius); }
+.ui .summary .total { padding-top: 12px; }
+.ui .note { gap: 10px; padding: 12px 14px; border-radius: var(--ui-radius-md); line-height: 1.5; }
+.ui .addr { gap: 8px; padding: 12px 14px; border-radius: var(--ui-radius-md); font-size: 13px; }
+.ui .qr-box { width: 200px; height: 200px; padding: 12px; border-radius: var(--ui-radius-xl); box-shadow: var(--ui-shadow-sm); }
+.ui .ref-link { min-height: var(--ui-h); padding: 0 4px 0 12px; border: 1px solid var(--sc-border); border-radius: var(--ui-radius-md); background: var(--sc-muted); font-size: 13px; }
+.ui .ref-link .chip { height: 28px; min-height: 0; border: 0; box-shadow: none; background: var(--sc-bg); }
+
+/* tiles, empty states, gift cards */
+.ui .tile { padding: 16px; gap: 4px; }
+.ui .tile-row { gap: 12px; }
+.ui ol.stack { gap: 8px; }
+.ui .empty { gap: 12px; padding: 40px 20px; }
+.ui .gift-grid { gap: 16px; }
+.ui .gift { gap: 12px; padding: 16px; border-radius: var(--ui-radius-xl); box-shadow: var(--ui-shadow-xs); }
+.ui .gift:hover { transform: none; box-shadow: var(--ui-shadow-sm); }
+.ui .success { gap: 12px; padding: 24px 0 8px; }
+.ui .success .amount { font-size: 28px; font-weight: var(--fw-semibold); }
+.ui .panel-body .rows .row-item { padding-inline: 4px; }
+
+/* home */
+.ui .welcome .wl-actions { margin-top: 24px; }
+.ui .ref-actions { margin-top: 12px; }
+
+@media (max-width: 479px) {
+  .ui .view { padding: 20px 16px 48px; }
+  .ui .page-head .cta-row { width: 100%; }
+  .ui .page-head .cta-row .btn { flex: 1 1 calc(50% - 8px); }
+}
