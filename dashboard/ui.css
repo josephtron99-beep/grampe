@@ -412,3 +412,6 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
   .ui .toolbar .select-menu { min-width: 180px; }
   .ui .toolbar .select:last-child .select-menu { left: auto; right: 0; }
 }
+
+/* brand logo in the sidebar */
+.sb-logo-img { display: block; width: 124px; height: auto; }

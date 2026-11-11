@@ -8,16 +8,17 @@
   <meta name="description" content="Grampe wallet dashboard: balances, assets, activity, swap, RuPay card, staking and referrals.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0500FF">
-  <link rel="icon" href="../assets/img/shield.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Design system: tokens → components → page -->
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261112i">
-  <link rel="stylesheet" href="../assets/css/components.css?v=20261112i">
-  <link rel="stylesheet" href="dashboard.css?v=20261112i">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261112j">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20261112j">
+  <link rel="stylesheet" href="dashboard.css?v=20261112j">
   <!-- shadcn/ui component layer (Grampe colours) -->
-  <link rel="stylesheet" href="ui.css?v=20261112i">
+  <link rel="stylesheet" href="ui.css?v=20261112j">
 </head>
 <body class="app-body ui">
 
@@ -27,8 +28,7 @@
   <aside class="sidebar" id="sidebar" aria-label="Dashboard navigation">
     <div class="sb-head">
       <a href="#/home" class="sb-brand" aria-label="Grampe dashboard home">
-        <span class="sb-brand-mark"><img src="../assets/img/shield.svg" alt="" width="18" height="20"></span>
-        <span class="sb-brand-text"><b>Grampe</b><small>Wallet</small></span>
+        <img class="sb-logo-img" src="../assets/img/grampe-logo.png" alt="Grampe" width="194" height="44">
       </a>
       <button class="icon-btn icon-btn-sm sb-close" data-action="sb-close" aria-label="Close menu"><svg class="ico"><use href="../assets/img/icons.svg#i-x"/></svg></button>
     </div>
@@ -79,7 +79,7 @@
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
-<script src="data.js?v=20261112i" defer></script>
-<script src="app.js?v=20261112i" defer></script>
+<script src="data.js?v=20261112j" defer></script>
+<script src="app.js?v=20261112j" defer></script>
 </body>
 </html>
