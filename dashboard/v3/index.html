@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" class="no-js" data-theme="carbon">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.remove("no-js");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Overview · Grampe Wallet V3</title>
+  <meta name="description" content="Grampe wallet dashboard, version 3: overview of balances, assets, spending and portfolio.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0A0A0B">
+  <link rel="icon" href="../../assets/img/shield.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Design system: tokens (carbon theme) → components → V3 page -->
+  <link rel="stylesheet" href="../../assets/css/tokens.css?v=20261111g">
+  <link rel="stylesheet" href="../../assets/css/components.css?v=20261111g">
+  <link rel="stylesheet" href="v3.css?v=20261111g">
+</head>
+<body class="v3">
+
+<div class="glow-bg" aria-hidden="true"></div>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top3">
+  <a href="index.html" class="logo3" aria-label="Grampe dashboard"><img src="../../assets/img/shield.svg" alt="" width="26" height="30"><span>Grampe<em>.wallet</em></span></a>
+  <div class="top3-right">
+    <button class="addr-pill" id="addrPill" title="Copy wallet address"><span class="coin coin-sm coin-ginr">₹</span><span class="mono" id="addrShort">0x4a7C…a1F3</span><svg class="ico"><use href="../../assets/img/icons.svg#i-copy"/></svg></button>
+    <span class="badge badge-primary demo3">Demo data</span>
+    <button class="icon3" aria-label="Settings" data-toast="Settings live in the full dashboard"><svg class="ico"><use href="../../assets/img/icons.svg#i-settings"/></svg></button>
+    <button class="icon3" aria-label="Notifications" data-toast="You're all caught up"><svg class="ico"><use href="../../assets/img/icons.svg#i-bell"/></svg><i class="dot3"></i></button>
+    <span class="avatar avatar-sm avatar-1" aria-label="Aarav Mehta">AM</span>
+  </div>
+</header>
+
+<!-- ============ TABS (scroll-spy) ============ -->
+<nav class="tabs3" id="tabs3" aria-label="Dashboard pages">
+  <span class="tab3-ind" id="tabInd" aria-hidden="true"></span>
+  <a href="index.html" class="tab3 active" aria-current="page"><svg class="ico"><use href="../../assets/img/icons.svg#i-grid"/></svg><span>Overview</span></a>
+  <a href="exchange.html" class="tab3" data-soon="Exchange"><svg class="ico"><use href="../../assets/img/icons.svg#i-swap"/></svg><span>Exchange</span><em class="soon3">Soon</em></a>
+  <a href="earn.html" class="tab3" data-soon="Earn"><svg class="ico"><use href="../../assets/img/icons.svg#i-layers"/></svg><span>Earn</span><em class="soon3">Soon</em></a>
+  <a href="activity.html" class="tab3" data-soon="Activity"><svg class="ico"><use href="../../assets/img/icons.svg#i-list"/></svg><span>Activity</span><em class="soon3">Soon</em></a>
+</nav>
+
+<main class="wrap3">
+
+  <!-- ============ OVERVIEW ============ -->
+  <section id="overview" class="sec3" aria-labelledby="ovTitle">
+    <div class="page3-head"><div><p class="caption" id="greet3">Welcome back</p><h1 id="ovTitle" class="sec3-title">Dashboard overview</h1></div><span class="caption" id="updated3"></span></div>
+    <div class="panel3">
+      <div class="panel3-head">
+        <div class="segmented" role="radiogroup" aria-label="Account">
+          <button role="radio" aria-checked="true" data-acct="wallet">Wallet</button>
+          <button role="radio" aria-checked="false" data-acct="card">Card</button>
+        </div>
+        
+        <div class="head-actions">
+          <button class="btn btn-sm btn-ghost3" id="addToken"><svg class="ico"><use href="../../assets/img/icons.svg#i-plus"/></svg>Add token</button>
+          <button class="btn btn-sm btn-ghost3" id="netBtn" aria-haspopup="listbox"><span id="netLabel">All networks</span><svg class="ico"><use href="../../assets/img/icons.svg#i-chevron-down"/></svg></button>
+        </div>
+      </div>
+
+      <div class="asset-row" id="assetRow"><!-- asset cards --></div>
+
+      <div class="stats3">
+        <div class="stat3"><span class="caption">Total balance</span><b class="t-mint money" id="sTotal">—</b><small><span class="caption">INR</span> <span class="chg-up" id="sTotalChg"></span></small></div>
+        <div class="stat3"><span class="caption">Spent · 30 days</span><b class="t-red money" id="sSpent">—</b><small class="caption">Sends, UPI &amp; gift cards</small></div>
+        <div class="stat3"><span class="caption">Received · 30 days</span><b class="money" id="sRecv">—</b><small class="caption">From users &amp; addresses</small></div>
+      </div>
+
+      <div class="viz-row">
+        <div class="viz3">
+          <div class="viz3-head"><b>Monthly UPI limit</b><span class="caption" id="gaugeText">—</span></div>
+          <div class="gauge" id="gauge"></div>
+        </div>
+        <div class="viz3">
+          <div class="viz3-head"><b>Portfolio</b><span class="caption">by value</span></div>
+          <div class="donut3-wrap"><div class="donut3" id="donut3"></div><ul class="legend3" id="legend3"></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot3"><span>Grampe · Dashboard V3 · Overview</span><span>Other layouts: <a href="../">V1</a> · <a href="../v2/">V2</a></span></footer>
+</main>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script src="../data.js?v=20261111g" defer></script>
+<script src="shell.js?v=20261111g" defer></script>
+<script src="overview.js?v=20261111g" defer></script>
+</body>
+</html>

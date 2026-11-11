@@ -55,6 +55,18 @@
   --glow-blue: #5B6CFF;
   --glow-violet: #8B5CFF;
 
+  /* carbon palette (neutral dark theme) */
+  --carbon-950: #0A0A0B;
+  --carbon-900: #111113;
+  --carbon-850: #161618;
+  --carbon-800: #1C1C1F;
+  --carbon-700: #27272B;
+  --carbon-500: #8A8A93;
+  --violet-500: #7C4DFF;
+  --violet-400: #9670FF;
+  --teal-400: #2DE1C2;
+  --red-400: #FF5A6E;
+
   /* asset marks (dashboard) */
   --asset-eth: #627EEA; --asset-bnb: #F3BA2F; --asset-ton: #0098EA;
   --asset-usdt: #26A17B; --asset-xlm: #14181F; --asset-shop: #7B4DFF;
@@ -257,4 +269,41 @@
   --shadow-lg: 0 30px 80px -20px rgba(0, 0, 0, .8);
   --shadow-primary: 0 14px 34px -10px rgba(91, 108, 255, .7);
   --ring-primary: 0 0 0 4px rgba(91, 108, 255, .25);
+}
+
+/* ==========================================================
+   THEME: CARBON (neutral dark, violet primary, mint/teal glow)
+   Usage: <html data-theme="carbon">
+   ========================================================== */
+[data-theme="carbon"] {
+  color-scheme: dark;
+  --color-bg: var(--carbon-950);
+  --color-surface: var(--carbon-850);
+  --color-surface-hover: var(--carbon-800);
+  --color-text: #F4F4F6;
+  --color-text-muted: var(--carbon-500);
+  --color-border: rgba(255, 255, 255, .07);
+  --color-border-strong: rgba(124, 77, 255, .6);
+  --color-primary: var(--violet-500);
+  --color-primary-hover: var(--violet-400);
+  --color-primary-soft: rgba(124, 77, 255, .16);
+  --color-dark: var(--carbon-700);
+  --color-dark-hover: var(--carbon-800);
+  --color-accent: var(--teal-400);
+  --color-success: var(--mint-400);
+  --color-success-soft: rgba(65, 246, 154, .12);
+  --color-danger: var(--red-400);
+  --gray-50: rgba(255, 255, 255, .04);
+  --gray-200: rgba(255, 255, 255, .12);
+  --cream-50: rgba(245, 158, 11, .14);
+  --sky-50: rgba(45, 225, 194, .12);
+  --violet-50: rgba(124, 77, 255, .16);
+  --blue-50: rgba(124, 77, 255, .14);
+  --mint-50: rgba(65, 246, 154, .1);
+  --mint-200: rgba(65, 246, 154, .3);
+  --shadow-sm: none;
+  --shadow-md: 0 16px 40px -18px rgba(0, 0, 0, .8);
+  --shadow-lg: 0 30px 80px -20px rgba(0, 0, 0, .9);
+  --shadow-primary: 0 12px 30px -10px rgba(124, 77, 255, .7);
+  --ring-primary: 0 0 0 4px rgba(124, 77, 255, .25);
 }

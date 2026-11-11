@@ -39,6 +39,12 @@ Same pages, data and flows as V1 with a completely different look: dark "Night" 
 
 Asset links carry a `?v=` tag; bump it in both dashboard `index.html` files when you release CSS/JS changes so browsers fetch fresh files.
 
+## Dashboard V3 (`/dashboard/v3`)
+Multi-page concept in a neutral dark "carbon" theme (`data-theme="carbon"` in `tokens.css`), inspired by crypto-wallet references: glowing page tabs, asset cards with hover sparklines and Deposit/Withdraw/Swap, coloured stat tiles, UPI-limit gauge and portfolio donut.
+- Built so far: **Overview** (`index.html`). Exchange, Earn and Activity tabs are marked "Soon" and will become `exchange.html`, `earn.html`, `activity.html`.
+- `shell.js` is shared by every V3 page (top bar, page tabs, toasts, helpers as `window.G3`); each page adds its own script (`overview.js`). Styles: `v3.css`.
+- Card actions open the matching V1 pages until the V3 pages exist.
+
 ## Design system
 Every page loads `tokens.css` → `components.css` → its own page file (e.g. `home.css`).
 - No hex colours or one-off pixel sizes in components or page files; use tokens.
