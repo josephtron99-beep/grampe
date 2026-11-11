@@ -28,22 +28,14 @@ Open http://localhost:5510
 
 ## Dashboard (`/dashboard`)
 Signed-in wallet app built on the same design system. Open `dashboard/index.html` (locally: http://localhost:5510/dashboard/).
-- `index.html` app shell · `dashboard.css` layout · `app.js` router, pages and flows · `data.js` **demo data**
+- `index.html` app shell · `dashboard.css` layout · `ui.css` shadcn/ui-style component layer (shadcn spacing, radius, shadows and focus rings; Grampe colours only) · `app.js` router, pages and flows · `data.js` **demo data**
+- Sidebar: Home, Wallet, Products (Swap, RuPay card, Staking, Refer), Need help (Telegram), Log out. Header: breadcrumb, notifications, profile menu (My profile, Log out). Content is centred at 800px max.
 - Pages (hash links): `#/home` `#/wallet` `#/history` `#/send` `#/receive` `#/swap` `#/transfer` `#/upi` `#/cards` `#/staking` `#/gifts` `#/referral` `#/profile` `#/security`
 - Mirrors the live grampe.co wallet: 9 assets, 7 networks, swap rule (GCC only from USDT), UPI with OTP, RuPay virtual card, gift cards, profile, password.
 - Not connected to the backend: balances, history and fees are fictional and saved in the browser (`localStorage`). Replace `data.js` and the flow handlers in `app.js` with API calls to go live.
-- Extras: Ctrl K command palette, hide balances, INR/USD, collapsible sidebar, bottom tab bar + quick-action button on phones.
+- Extras: hide balances, INR/USD, sidebar opens as a sheet on phones.
 
-## Dashboard V2 (`/dashboard/v2`)
-Same pages, data and flows as V1 with a completely different look: dark "Night" theme (`data-theme="night"` in `tokens.css`), glass top menu with mega menus, bento home (rolling balance, allocation donut, market sparklines, activity timeline, holographic card), asset-card wallet, intro splash and mesh background. Uses `../data.js` and the shared page patterns in `../dashboard.css`; its own styles are in `v2.css`. Switch between versions from the user menu.
-
-Asset links carry a `?v=` tag; bump it in both dashboard `index.html` files when you release CSS/JS changes so browsers fetch fresh files.
-
-## Dashboard V3 (`/dashboard/v3`)
-Multi-page concept in a neutral dark "carbon" theme (`data-theme="carbon"` in `tokens.css`), inspired by crypto-wallet references: glowing page tabs, asset cards with hover sparklines and Deposit/Withdraw/Swap, coloured stat tiles, UPI-limit gauge and portfolio donut.
-- Built so far: **Overview** (`index.html`). Exchange, Earn and Activity tabs are marked "Soon" and will become `exchange.html`, `earn.html`, `activity.html`.
-- `shell.js` is shared by every V3 page (top bar, page tabs, toasts, helpers as `window.G3`); each page adds its own script (`overview.js`). Styles: `v3.css`.
-- Card actions open the matching V1 pages until the V3 pages exist.
+Asset links in `dashboard/index.html` carry a `?v=` tag; bump it when you release CSS/JS changes so browsers fetch fresh files.
 
 ## Design system
 Every page loads `tokens.css` → `components.css` → its own page file (e.g. `home.css`).

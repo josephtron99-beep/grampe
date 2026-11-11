@@ -137,34 +137,91 @@
 
   /* ---------------- routes ---------------- */
   var ROUTES = [
-    { id: "home", title: "Home", group: "Overview", icon: "i-home" },
-    { id: "wallet", title: "Wallet", group: "Overview", icon: "i-wallet" },
-    { id: "history", title: "History", group: "Overview", icon: "i-list" },
-    { id: "send", title: "Send", group: "Move money", icon: "i-send" },
-    { id: "receive", title: "Add fund", group: "Move money", icon: "i-receive" },
-    { id: "swap", title: "Swap", group: "Move money", icon: "i-swap" },
-    { id: "transfer", title: "Transfer", group: "Move money", icon: "i-users" },
-    { id: "upi", title: "UPI transfer", group: "Move money", icon: "i-bolt" },
-    { id: "cards", title: "RuPay card", group: "Products", icon: "i-card", badge: "Soon" },
-    { id: "staking", title: "Staking", group: "Products", icon: "i-layers", badge: "Soon" },
-    { id: "gifts", title: "Gift cards", group: "Products", icon: "i-gift" },
-    { id: "referral", title: "Refer & earn", group: "Products", icon: "i-share" },
-    { id: "profile", title: "Profile", group: "Account", icon: "i-user" },
+    { id: "home", title: "Home", group: "Overview", icon: "i-home", nav: "main" },
+    { id: "wallet", title: "Wallet", group: "Overview", icon: "i-wallet", nav: "main" },
+    { id: "swap", title: "Swap", group: "Products", icon: "i-swap", nav: "products" },
+    { id: "cards", title: "RuPay card", group: "Products", icon: "i-card", nav: "products", badge: "Soon" },
+    { id: "staking", title: "Staking", group: "Products", icon: "i-layers", nav: "products", badge: "Soon" },
+    { id: "referral", title: "Refer", group: "Products", icon: "i-share", nav: "products" },
+    { id: "history", title: "History", group: "Wallet", icon: "i-list" },
+    { id: "send", title: "Send", group: "Wallet", icon: "i-send" },
+    { id: "receive", title: "Add fund", group: "Wallet", icon: "i-receive" },
+    { id: "transfer", title: "Transfer", group: "Wallet", icon: "i-users" },
+    { id: "upi", title: "UPI transfer", group: "Wallet", icon: "i-bolt" },
+    { id: "gifts", title: "Gift cards", group: "Wallet", icon: "i-gift" },
+    { id: "profile", title: "My profile", group: "Account", icon: "i-user" },
     { id: "security", title: "Security", group: "Account", icon: "i-lock" }
   ];
   var PAGES = {};
   function route() { return ROUTES.filter(function (r) { return r.id === current.id; })[0]; }
   var current = { id: "home", params: {} };
 
+  /* shadcn Sidebar: Home, Wallet, Products (collapsible: Swap, RuPay card, Staking, Refer) */
+  var productsOpen = null; // null = follow the route; true/false = user toggled
   function buildSidebar() {
-    var html = "", g = "";
-    ROUTES.forEach(function (r) {
-      if (r.group !== g) { g = r.group; html += '<p class="sb-group">' + g + "</p>"; }
-      html += '<a class="sb-link" href="#/' + r.id + '" data-route="' + r.id + '" title="' + r.title + '">' + ico(r.icon) + "<span>" + r.title + "</span>" + (r.badge ? '<span class="badge badge-sm badge-primary">' + r.badge + "</span>" : "") + "</a>";
-    });
-    html += '<p class="sb-group">&nbsp;</p><button class="sb-link" data-action="logout" title="Log out">' + ico("i-logout") + "<span>Log out</span></button>";
-    $("#sbNav").innerHTML = html;
+    var main = ROUTES.filter(function (r) { return r.nav === "main"; }), prod = ROUTES.filter(function (r) { return r.nav === "products"; });
+    $("#sbNav").innerHTML = '<p class="sb-label">Menu</p><div class="sb-menu">' +
+      main.map(function (r) { return '<a class="sb-btn" href="#/' + r.id + '" data-route="' + r.id + '">' + ico(r.icon) + "<span>" + r.title + "</span></a>"; }).join("") +
+      '<button class="sb-btn" id="sbProducts" aria-expanded="false" aria-controls="sbProductsSub">' + ico("i-grid") + "<span>Products</span>" + ico("i-chevron-down", "ico chev") + "</button>" +
+      '<div class="sb-sub" id="sbProductsSub" hidden>' +
+      prod.map(function (r) { return '<a class="sb-subbtn" href="#/' + r.id + '" data-route="' + r.id + '"><span>' + r.title + "</span>" + (r.badge ? '<span class="badge badge-outline">' + r.badge + "</span>" : "") + "</a>"; }).join("") +
+      "</div></div>";
+    $("#sbProducts").addEventListener("click", function () { productsOpen = !isProductsOpen(); setProducts(productsOpen); });
   }
+  function isProductsOpen() { return $("#sbProducts").getAttribute("aria-expanded") === "true"; }
+  function setProducts(open) { $("#sbProducts").setAttribute("aria-expanded", String(open)); $("#sbProductsSub").hidden = !open; }
+  function sbOpen() { $("#app").classList.add("sb-open"); $(".hd-trigger").setAttribute("aria-expanded", "true"); var f = $(".sb-btn", $("#sidebar")); if (f) f.focus(); }
+  function sbClose() { var was = $("#app").classList.contains("sb-open"); $("#app").classList.remove("sb-open"); $(".hd-trigger").setAttribute("aria-expanded", "false"); return was; }
+
+  /* shadcn Select: replaces each native <select> with a trigger + rounded listbox.
+     The native select stays (hidden) as the source of value and "change" events. */
+  function enhanceSelects(root) {
+    $$("select", root).forEach(function (sel) {
+      if (sel.dataset.ui) return;
+      sel.dataset.ui = "1";
+      var fill = !!sel.closest(".input-wrap"), prefix = sel.dataset.prefix || "";
+      var wrap = document.createElement("div"), btn = document.createElement("button"), list = document.createElement("ul");
+      wrap.className = "select" + (fill ? " select-fill" : "");
+      btn.type = "button"; btn.className = "select-trigger";
+      btn.setAttribute("aria-haspopup", "listbox"); btn.setAttribute("aria-expanded", "false");
+      if (sel.getAttribute("aria-label")) btn.setAttribute("aria-label", sel.getAttribute("aria-label"));
+      if (sel.id) { btn.id = sel.id + "Btn"; var lab = $('label[for="' + sel.id + '"]'); if (lab) lab.htmlFor = btn.id; }
+      list.className = "select-menu"; list.setAttribute("role", "listbox"); list.hidden = true;
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel); wrap.appendChild(btn); wrap.appendChild(list);
+      sel.hidden = true; sel.tabIndex = -1;
+      function paint() {
+        var o = sel.options[sel.selectedIndex];
+        btn.innerHTML = (prefix ? '<span class="select-prefix">' + esc(prefix) + "</span>" : "") + '<span class="select-value">' + esc(o ? o.text : "") + "</span>" + ico("i-chevron-down", "ico select-chev");
+        list.innerHTML = Array.prototype.map.call(sel.options, function (o, i) {
+          return '<li role="option" tabindex="-1" data-i="' + i + '" aria-selected="' + (i === sel.selectedIndex) + '"><span>' + esc(o.text) + "</span>" + ico("i-check", "ico select-check") + "</li>";
+        }).join("");
+      }
+      function open() {
+        closeSelects(); closeMenu();
+        list.hidden = false; wrap.classList.add("open"); btn.setAttribute("aria-expanded", "true");
+        ($('[aria-selected="true"]', list) || list.firstElementChild).focus();
+      }
+      function close(focus) { list.hidden = true; wrap.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); if (focus) btn.focus(); }
+      function pick(i) { if (i !== sel.selectedIndex) { sel.selectedIndex = i; sel.dispatchEvent(new Event("change", { bubbles: true })); } paint(); close(true); }
+      wrap._close = close;
+      btn.addEventListener("click", function (e) { e.stopPropagation(); if (list.hidden) open(); else close(); });
+      btn.addEventListener("keydown", function (e) { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); open(); } });
+      list.addEventListener("click", function (e) { var li = e.target.closest("[data-i]"); if (li) { e.stopPropagation(); pick(+li.dataset.i); } });
+      list.addEventListener("keydown", function (e) {
+        var items = $$("[data-i]", list), i = items.indexOf(document.activeElement);
+        if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)].focus(); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)].focus(); }
+        else if (e.key === "Home") { e.preventDefault(); items[0].focus(); }
+        else if (e.key === "End") { e.preventDefault(); items[items.length - 1].focus(); }
+        else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (i > -1) pick(+items[i].dataset.i); }
+        else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(true); }
+        else if (e.key === "Tab") close();
+      });
+      paint();
+    });
+  }
+  function closeSelects() { $$(".select.open").forEach(function (w) { w._close(); }); }
 
   function parseHash() {
     var h = location.hash.replace(/^#\/?/, "");
@@ -180,8 +237,12 @@
     closePanel(); clearTimers();
     current = parseHash();
     var r = route(), P = PAGES[current.id];
-    $$(".sb-link").forEach(function (a) { a.classList.toggle("active", a.dataset.route === r.id); if (a.dataset.route === r.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
-    $$(".tabbar [data-tab]").forEach(function (a) { a.classList.toggle("active", a.dataset.tab === r.id); });
+    var navId = r.nav ? r.id : r.group === "Wallet" ? "wallet" : ""; // money pages light up Wallet
+    $$("#sbNav [data-route]").forEach(function (a) { a.classList.toggle("active", a.dataset.route === navId); if (a.dataset.route === navId) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    var inProd = r.nav === "products";
+    $("#sbProducts").classList.toggle("has-active", inProd);
+    if (inProd) setProducts(true); else if (productsOpen === null) setProducts(false);
+    sbClose();
     $("#tbTitle").textContent = r.title;
     $("#tbCrumb").textContent = r.group;
     document.title = r.title + " · Grampe Wallet";
@@ -189,16 +250,13 @@
     view.innerHTML = P.html(current.params);
     void view.offsetWidth; view.classList.add("enter");
     if (P.mount) P.mount(view, current.params);
+    enhanceSelects(view);
     window.scrollTo(0, 0);
   }
   function refreshChrome() {
     document.body.classList.toggle("masked", S.masked);
-    $("#app").classList.toggle("sb-collapsed", S.sbCollapsed);
     var p = S.profile, ini = p.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
     $("#userInitials").textContent = ini; $("#userName").textContent = p.name; $("#userId").textContent = "ID " + p.id;
-    var g = asset("GCC"); $("#tbPriceVal").textContent = "$" + g.price.toFixed(4);
-    $("#tbPriceChg").innerHTML = (g.change >= 0 ? "▲ " : "▼ ") + Math.abs(g.change).toFixed(1) + "%";
-    $("#tbPriceChg").className = g.change >= 0 ? "text-success" : "text-danger";
   }
 
   /* ================= PAGES ================= */
@@ -208,48 +266,36 @@
     html: function () {
       var t = total(), top = S.assets.slice().sort(function (a, b) { return b.bal * b.price - a.bal * a.price; }).slice(0, 5);
       var dayChg = S.assets.reduce(function (s, a) { return s + a.bal * a.price * a.change / 100; }, 0), dayPct = t ? dayChg / t * 100 : 0;
+      var held = S.assets.filter(function (a) { return a.bal > 0; }).length;
+      var today = new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
       return '' +
-      '<section class="hero-bal">' +
-        '<div class="hb-top"><p class="hb-greet">' + greet() + ", " + esc(S.profile.name.split(" ")[0]) + ' 👋</p>' + curToggle() + "</div>" +
-        '<p class="hb-label">Total balance <button data-action="mask" aria-label="' + (S.masked ? "Show" : "Hide") + ' balances">' + ico(S.masked ? "i-eye-off" : "i-eye") + "</button></p>" +
-        '<p class="hb-amount">' + m('<span id="heroTotal">' + money(t) + "</span>") + "</p>" +
-        '<p class="hb-sub"><span class="badge">' + (dayPct >= 0 ? "▲ " : "▼ ") + Math.abs(dayPct).toFixed(2) + "% today</span><span>across " + S.assets.filter(function (a) { return a.bal > 0; }).length + " assets</span></p>" +
-        '<div class="quick">' + [["send", "i-send", "Send"], ["receive", "i-receive", "Add fund"], ["swap", "i-swap", "Swap"], ["transfer", "i-users", "Transfer"], ["upi", "i-bolt", "UPI"]].map(function (q) {
-          return '<a href="#/' + q[0] + '"><span class="icon-tile">' + ico(q[1]) + "</span>" + q[2] + "</a>";
-        }).join("") + "</div>" +
-      "</section>" +
-      '<div class="grid-2 grid-main" style="margin-top:var(--grid-gap)">' +
-        '<section class="card box chart-card">' +
-          '<div class="section-title"><h2>GCC price</h2><div class="segmented" role="radiogroup" aria-label="Chart range">' + ["1D", "1W", "1M", "3M", "1Y"].map(function (r, i) { return '<button role="radio" aria-checked="' + (i === 1) + '" data-range="' + r + '">' + r + "</button>"; }).join("") + "</div></div>" +
-          '<div class="price-row"><span class="coin coin-gcc">G</span><span class="price" id="cPrice">$' + asset("GCC").price.toFixed(4) + '</span><span id="cChg"></span></div>' +
-          '<div class="chart" id="chart"></div><p class="caption updated">Demo price data · updated ' + new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) + "</p>" +
-        "</section>" +
-        '<section class="card box"><div class="section-title"><h2>Assets</h2><a class="link" href="#/wallet">View all ' + ico("i-arrow") + "</a></div>" +
-          '<div class="rows">' + top.map(assetRow).join("") + "</div></section>" +
-      "</div>" +
-      '<div class="grid-2 grid-main" style="margin-top:var(--grid-gap)">' +
-        '<section class="card box"><div class="section-title"><h2>Recent activity</h2><a class="link" href="#/history">See all ' + ico("i-arrow") + "</a></div>" +
-          '<div class="rows">' + S.history.slice(0, 5).map(txRow).join("") + "</div></section>" +
-        '<div class="stack">' +
-          '<a class="card box mini-card tile-link" href="#/cards"><div class="row-flex"><h2 class="title">My card</h2><span class="badge badge-primary">Coming soon</span></div>' +
-            '<div class="row-flex"><span class="row-main"><b>RuPay virtual card</b><small>•••• 4821 · Card balance ' + m(money(S.card.balance / D.usdInr)) + "</small></span>" + ico("i-arrow") + "</div></a>" +
-          '<section class="card box mini-card"><div class="row-flex"><h2 class="title">Refer &amp; earn</h2><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
-            '<p class="body-sm">Invite friends to Grampe with your referral link.</p>' +
-            '<div class="ref-link"><span>' + esc(S.profile.refLink) + '</span><button class="chip" data-copy="' + esc(S.profile.refLink) + '" data-what="Referral link">' + ico("i-copy") + 'Copy</button></div></section>' +
-          '<div class="grid-2" style="grid-template-columns:1fr 1fr">' +
-            '<a class="tile tile-link" href="#/gifts"><span class="icon-tile tone-warning">' + ico("i-gift") + '</span><b class="tile-title">Gift cards</b><span class="tile-text">Pay with GINR</span></a>' +
-            '<a class="tile tile-link" href="#/staking"><span class="icon-tile tone-violet">' + ico("i-layers") + '</span><b class="tile-title">Staking</b><span class="tile-text">Coming soon</span></a>' +
-          "</div>" +
+      '<section class="welcome" aria-labelledby="wlTitle">' +
+        '<img class="wl-mark" src="../assets/img/shield.svg" alt="" width="92" height="104">' +
+        '<div class="wl-top"><span class="wl-badge"><i></i>' + today + "</span>" + curToggle() + "</div>" +
+        '<h1 id="wlTitle">' + greet() + ", " + esc(S.profile.name.split(" ")[0]) + " 👋</h1>" +
+        '<p class="wl-sub">Welcome back to Grampe. Your crypto and GINR in one safe place: send, swap and pay in seconds.</p>' +
+        '<div class="wl-bal"><div>' +
+          '<p class="wl-bal-label">Total balance <button data-action="mask" aria-label="' + (S.masked ? "Show" : "Hide") + ' balances">' + ico(S.masked ? "i-eye-off" : "i-eye") + "</button></p>" +
+          '<p class="wl-amount">' + m('<span id="heroTotal">' + money(t) + "</span>") + "</p></div>" +
+          '<div class="wl-meta"><span class="wl-pill' + (dayPct >= 0 ? " up" : "") + '">' + (dayPct >= 0 ? "▲ " : "▼ ") + Math.abs(dayPct).toFixed(2) + '% today</span><span class="wl-pill">' + held + " assets</span></div>" +
         "</div>" +
-      "</div>";
+        '<div class="wl-actions">' +
+          '<a class="btn btn-sm" href="#/send">' + ico("i-send") + "Send</a>" +
+          '<a class="btn btn-sm" href="#/receive">' + ico("i-receive") + "Add fund</a>" +
+          '<a class="btn btn-sm wl-ghost" href="#/swap">' + ico("i-swap") + "Swap</a>" +
+          '<a class="btn btn-sm wl-ghost" href="#/transfer">' + ico("i-users") + "Transfer</a>" +
+          '<a class="btn btn-sm wl-ghost" href="#/upi">' + ico("i-bolt") + "UPI</a>" +
+        "</div>" +
+      "</section>" +
+      '<section class="card box"><div class="card-header"><div><h2 class="card-title">Assets</h2><p class="card-desc">Your top holdings by value</p></div><a class="btn btn-ghost btn-sm" href="#/wallet">View all ' + ico("i-arrow") + "</a></div>" +
+        '<div class="rows">' + top.map(assetRow).join("") + "</div></section>" +
+      '<section class="card box"><div class="card-header"><div><h2 class="card-title">Recent activity</h2><p class="card-desc">Your latest transactions</p></div><a class="btn btn-ghost btn-sm" href="#/history">See all ' + ico("i-arrow") + "</a></div>" +
+        '<div class="rows">' + S.history.slice(0, 5).map(txRow).join("") + "</div></section>" +
+      '<section class="card box"><div class="card-header"><div><h2 class="card-title">Refer a friend</h2><p class="card-desc">Share your link and bring friends to Grampe.</p></div><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
+        '<div class="ref-box"><span>' + esc(S.profile.refLink) + '</span><button class="btn btn-secondary btn-sm" data-copy="' + esc(S.profile.refLink) + '" data-what="Referral link">' + ico("i-copy") + "Copy</button></div>" +
+        '<div class="ref-actions"><a class="btn btn-ghost btn-sm" href="#/referral">Open Refer ' + ico("i-arrow") + "</a></div></section>";
     },
-    mount: function (v) {
-      drawChart($("#chart", v), "1W");
-      $$("[data-range]", v).forEach(function (b) {
-        b.addEventListener("click", function () { $$("[data-range]", v).forEach(function (x) { x.setAttribute("aria-checked", String(x === b)); }); drawChart($("#chart", v), b.dataset.range); });
-      });
-      countUp($("#heroTotal", v), total());
-    }
+    mount: function (v) { countUp($("#heroTotal", v), total()); }
   };
   function curToggle() { return '<div class="cur-toggle" role="group" aria-label="Display currency"><button data-cur="INR" aria-pressed="' + (S.cur === "INR") + '">₹ INR</button><button data-cur="USD" aria-pressed="' + (S.cur === "USD") + '">$ USD</button></div>'; }
   function countUp(el, usd) {
@@ -346,10 +392,10 @@
   /* ---------- WALLET ---------- */
   PAGES.wallet = {
     html: function () {
-      return '<div class="page-head"><div><p class="caption">Total balance</p><p class="h2">' + m(money(total())) + '</p></div><div class="cta-row" style="margin:0"><a class="btn btn-primary" href="#/send">' + ico("i-send") + 'Send</a><a class="btn btn-secondary" href="#/receive">' + ico("i-receive") + 'Add fund</a><a class="btn btn-secondary" href="#/swap">' + ico("i-swap") + "Swap</a></div></div>" +
+      return '<div class="page-head"><div><p class="caption">Total balance</p><p class="h2">' + m(money(total())) + '</p></div><div class="cta-row" style="margin:0"><a class="btn btn-primary" href="#/send">' + ico("i-send") + 'Send</a><a class="btn btn-secondary" href="#/receive">' + ico("i-receive") + 'Add fund</a><a class="btn btn-secondary" href="#/swap">' + ico("i-swap") + 'Swap</a><a class="btn btn-secondary" href="#/history">' + ico("i-list") + "History</a></div></div>" +
         '<section class="card box">' +
         '<div class="toolbar"><div class="input-wrap">' + ico("i-search") + '<input class="input" id="wQ" placeholder="Search assets" aria-label="Search assets"></div>' +
-        '<select class="chip" id="wSort" aria-label="Sort assets"><option value="value">Sort: Value</option><option value="name">Sort: Name</option><option value="change">Sort: 24h change</option></select>' +
+        '<select id="wSort" data-prefix="Sort by" aria-label="Sort assets"><option value="value">Value</option><option value="name">Name</option><option value="change">24h change</option></select>' +
         '<label class="chip" style="cursor:pointer"><button type="button" class="switch" id="wZero" role="switch" aria-checked="false" aria-label="Hide zero balances"></button>Hide zero</label></div>' +
         '<div class="chip-row" id="wNets"><button class="chip is-active" data-net="all">All networks</button>' + D.networks.map(function (n) { return '<button class="chip" data-net="' + n.id + '">' + n.name + "</button>"; }).join("") + "</div>" +
         '<div class="rows" id="wList" style="margin-top:8px"></div></section>';
@@ -647,40 +693,29 @@
   PAGES.cards = {
     html: function () {
       var c = S.card;
-      return '<div class="page-head"><div><h2 class="h3">RuPay virtual card</h2><p class="sub">Spend your GINR anywhere RuPay is accepted.</p></div><span class="badge badge-lg badge-primary">Coming soon</span></div>' +
-        '<div class="grid-2">' +
-          '<section class="card box"><div class="vcard-wrap"><div class="vcard' + (c.frozen ? " frozen" : "") + '" id="vcard" role="button" tabindex="0" aria-label="Flip card">' +
-            '<div class="vface"><div class="vtop"><span><img src="../assets/img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum" id="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
-            '<div class="vface back"><div class="vstripe"></div><div class="vcvv"><span class="caption">CVV</span><b id="vcvv">•••</b></div><p class="caption" style="color:var(--navy-300);margin-top:auto">Virtual card · demo details</p></div>' +
+      return '<section class="card box soon-hero">' +
+          '<div class="vcard-wrap"><div class="vcard" id="vcard" role="button" tabindex="0" aria-label="Flip card">' +
+            '<div class="vface"><div class="vtop"><span><img src="../assets/img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
+            '<div class="vface back"><div class="vstripe"></div><div class="vcvv"><span class="caption">CVV</span><b>•••</b></div><p class="caption" style="color:var(--navy-300);margin-top:auto">Virtual card preview</p></div>' +
           "</div></div>" +
-          '<div class="cta-row" style="justify-content:center"><button class="btn btn-secondary btn-sm" id="cReveal">' + ico("i-eye") + '<span>Show details</span></button><button class="btn btn-secondary btn-sm" id="cFlip">' + ico("i-refresh") + 'Flip</button><button class="btn btn-secondary btn-sm" id="cCopy" disabled>' + ico("i-copy") + "Copy number</button></div>" +
-          '<div class="summary" style="margin-top:16px"><div><span>Card balance</span><b>' + m("₹" + num(c.balance, 2)) + "</b></div><div><span>Status</span><b>" + (c.frozen ? "Frozen" : "Active (preview)") + "</b></div></div></section>" +
-          '<div class="stack">' +
-            '<section class="card box"><div class="section-title"><h2>Card controls</h2></div><div class="rows card-controls">' +
-              ctrl("frozen", "i-snow", "Freeze card", "Temporarily block all payments", c.frozen) +
-              ctrl("online", "i-globe", "Online payments", "Use the card for online shopping", c.online) +
-              ctrl("contactless", "i-bolt", "Contactless", "Tap to pay at shops", c.contactless) +
-            '</div><div class="input-group" style="margin-top:16px"><label class="input-label" for="cLimit">Daily limit <b class="text-primary" id="cLimitV" style="float:right">₹' + num(c.limit, 0) + '</b></label><input type="range" id="cLimit" min="1000" max="100000" step="1000" value="' + c.limit + '" style="width:100%;accent-color:var(--color-primary)"></div></section>' +
-            '<section class="card box"><div class="section-title"><h2>Send money to card</h2></div><div class="input-group"><div class="input-wrap" id="cAmtW"><span class="input-addon">₹</span><input class="input input-lg" id="cAmt" inputmode="decimal" placeholder="0"></div><p class="input-hint">From GINR balance · ' + m("₹" + num(asset("GINR").bal, 2)) + '</p></div><button class="btn btn-primary btn-block" style="margin-top:12px" id="cTop" disabled>Add money</button></section>' +
-          "</div>" +
-        "</div>";
+          '<span class="badge badge-primary soon-badge">Coming soon</span>' +
+          '<h1 class="soon-title">RuPay virtual card</h1>' +
+          '<p class="soon-sub">Spend your GINR anywhere RuPay is accepted. Tap the card to flip it.</p>' +
+        "</section>" +
+        '<section class="card box is-soon" aria-disabled="true"><div class="card-header"><div><h2 class="card-title">Card controls</h2><p class="card-desc">Available when the card goes live</p></div><span class="badge badge-outline">Soon</span></div><div class="rows card-controls">' +
+          ctrl("frozen", "i-snow", "Freeze card", "Temporarily block all payments", false) +
+          ctrl("online", "i-globe", "Online payments", "Use the card for online shopping", c.online) +
+          ctrl("contactless", "i-bolt", "Contactless", "Tap to pay at shops", c.contactless) +
+        '</div><div class="input-group" style="margin-top:16px"><label class="input-label" for="cLimit">Daily limit <b id="cLimitV" style="float:right">₹' + num(c.limit, 0) + '</b></label><input type="range" id="cLimit" min="1000" max="100000" step="1000" value="' + c.limit + '" disabled style="width:100%"></div></section>' +
+        '<section class="card box is-soon" aria-disabled="true"><div class="card-header"><div><h2 class="card-title">Send to my card</h2><p class="card-desc">Top up the card from your GINR balance</p></div><span class="badge badge-outline">Soon</span></div>' +
+          '<div class="input-wrap"><span class="input-addon">₹</span><input class="input" placeholder="0" disabled aria-label="Amount"></div>' +
+          '<div class="cta-row"><button class="btn btn-primary" disabled>Send to card</button></div></section>';
     },
     mount: function (v) {
-      var card = $("#vcard", v), shown = false, c = S.card;
+      var card = $("#vcard", v);
       function flip() { card.classList.toggle("flipped"); }
       card.addEventListener("click", flip); card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
-      $("#cFlip", v).addEventListener("click", flip);
-      $("#cReveal", v).addEventListener("click", function () {
-        shown = !shown; $("#vnum", v).textContent = shown ? "6254 7310 9826 4821" : "6254 •••• •••• 4821"; $("#vcvv", v).textContent = shown ? "582" : "•••";
-        $("#cReveal span", v).textContent = shown ? "Hide details" : "Show details"; $("#cCopy", v).disabled = !shown;
-        if (shown) setTimeout(function () { if (shown) $("#cReveal", v).click(); }, 15000);
-      });
-      $("#cCopy", v).addEventListener("click", function () { copy("6254731098264821", "Card number"); });
-      $$("[data-ctrl]", v).forEach(function (s) { s.addEventListener("click", function () { var k = s.dataset.ctrl; c[k] = !c[k]; s.setAttribute("aria-checked", String(c[k])); if (k === "frozen") { card.classList.toggle("frozen", c.frozen); toast(c.frozen ? "Card frozen" : "Card unfrozen", "i-snow"); } save(); }); });
-      $("#cLimit", v).addEventListener("input", function (e) { c.limit = +e.target.value; $("#cLimitV", v).textContent = "₹" + num(c.limit, 0); save(); });
-      var amt = $("#cAmt", v), g = asset("GINR");
-      amt.addEventListener("input", function () { var n = parseFloat(amt.value) || 0; $("#cAmtW", v).className = "input-wrap" + (amt.value && (n <= 0 || n > g.bal) ? " is-invalid" : ""); $("#cTop", v).disabled = !(n > 0 && n <= g.bal) || c.frozen; });
-      $("#cTop", v).addEventListener("click", function () { var n = parseFloat(amt.value); g.bal = +(g.bal - n).toFixed(2); c.balance = +(c.balance + n).toFixed(2); record({ type: "card", asset: "GINR", amount: n }); toast("₹" + num(n, 2) + " added to your card", "i-card"); render(); });
+      $$(".is-soon button, .is-soon input", v).forEach(function (x) { x.disabled = true; x.tabIndex = -1; });
     }
   };
   function ctrl(k, icon, t, s, on) { return '<div class="row-item"><span class="icon-tile tone-primary">' + ico(icon) + '</span><span class="row-main"><b>' + t + "</b><small>" + s + '</small></span><button class="switch" role="switch" data-ctrl="' + k + '" aria-checked="' + on + '" aria-label="' + t + '"></button></div>'; }
@@ -688,15 +723,26 @@
   /* ---------- STAKING ---------- */
   PAGES.staking = {
     html: function () {
-      return '<section class="card box"><div class="empty"><span class="icon-tile icon-tile-xl tone-violet">' + ico("i-layers") + '</span><h2 class="h3">Staking is coming soon</h2><p class="sub">Put your GCC to work on Gram Chain. Plans and rates will be shown here at launch.</p>' +
-        '<label class="chip" style="cursor:pointer;min-height:48px;padding:0 16px"><button type="button" class="switch" id="stNotify" role="switch" aria-checked="' + S.notifyStaking + '" aria-label="Notify me at launch"></button>Notify me at launch</label></div></section>' +
-        '<div class="feature-grid" style="margin-top:var(--grid-gap)">' +
-          [["i-refresh", "Flexible", "Stake and unstake any time.", "tone-primary"], ["i-lock", "Locked", "Commit for a fixed period.", "tone-violet"], ["i-chart", "Auto-compound", "Rewards restake automatically.", "tone-success"]].map(function (f) {
-            return '<div class="tile"><span class="icon-tile ' + f[3] + '">' + ico(f[0]) + '</span><b class="tile-title" style="margin-top:8px">' + f[1] + '</b><span class="tile-text">' + f[2] + "</span></div>";
-          }).join("") + "</div>" +
+      return '<section class="card box soon-hero">' +
+          '<span class="icon-tile icon-tile-xl tone-violet soon-icon">' + ico("i-layers") + "</span>" +
+          '<span class="badge badge-primary soon-badge">Coming soon</span>' +
+          '<h1 class="soon-title">Staking</h1>' +
+          '<p class="soon-sub">Put your GCC to work on Gram Chain. Plans and rates will be shown here at launch.</p>' +
+          '<label class="soon-notify"><button type="button" class="switch" id="stNotify" role="switch" aria-checked="' + S.notifyStaking + '" aria-label="Notify me at launch"></button>Notify me at launch</label>' +
+        "</section>" +
+        '<section class="card box is-soon" aria-disabled="true"><div class="card-header"><div><h2 class="card-title">Staking plans</h2><p class="card-desc">Available at launch</p></div><span class="badge badge-outline">Soon</span></div><div class="rows">' +
+          [["i-refresh", "Flexible", "Stake and unstake any time"], ["i-lock", "Locked", "Commit for a fixed period"], ["i-chart", "Auto-compound", "Rewards restake automatically"]].map(function (f) {
+            return '<div class="row-item"><span class="icon-tile tone-primary">' + ico(f[0]) + '</span><span class="row-main"><b>' + f[1] + "</b><small>" + f[2] + '</small></span><span class="caption">— APY</span></div>';
+          }).join("") + "</div></section>" +
+        '<section class="card box is-soon" aria-disabled="true"><div class="card-header"><div><h2 class="card-title">Stake GCC</h2><p class="card-desc">Choose an amount to stake</p></div><span class="badge badge-outline">Soon</span></div>' +
+          '<div class="input-wrap"><input class="input" placeholder="0.00" disabled aria-label="Amount to stake"><span class="input-addon">GCC</span></div>' +
+          '<div class="cta-row"><button class="btn btn-primary" disabled>Stake now</button></div></section>' +
         '<p class="fine-print">Staking returns vary and are not guaranteed.</p>';
     },
-    mount: function (v) { $("#stNotify", v).addEventListener("click", function (e) { S.notifyStaking = !S.notifyStaking; e.currentTarget.setAttribute("aria-checked", String(S.notifyStaking)); save(); toast(S.notifyStaking ? "We'll notify you at launch" : "Notifications off", "i-bell"); }); }
+    mount: function (v) {
+      $$(".is-soon button, .is-soon input", v).forEach(function (x) { x.disabled = true; x.tabIndex = -1; });
+      $("#stNotify", v).addEventListener("click", function (e) { S.notifyStaking = !S.notifyStaking; e.currentTarget.setAttribute("aria-checked", String(S.notifyStaking)); save(); toast(S.notifyStaking ? "We'll notify you at launch" : "Notifications off", "i-bell"); });
+    }
   };
 
   /* ---------- GIFT CARDS ---------- */
@@ -768,20 +814,20 @@
   PAGES.profile = {
     html: function () {
       var p = S.profile, ini = p.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
-      return '<div class="grid-2 grid-main"><section class="card box"><div class="profile-head"><span class="avatar avatar-5">' + ini + '</span><div><p class="title title-lg">' + esc(p.name) + '</p><p class="caption">User ID ' + p.id + ' <button class="link" data-copy="' + p.id + '" data-what="User ID" style="margin:0 0 0 6px;padding:0">Copy</button></p></div></div>' +
+      return '<section class="card box"><div class="profile-head"><span class="avatar avatar-5">' + ini + '</span><div><p class="title title-lg">' + esc(p.name) + '</p><p class="caption">User ID ' + p.id + ' <button class="link" data-copy="' + p.id + '" data-what="User ID" style="margin:0 0 0 6px;padding:0">Copy</button></p></div></div>' +
         '<form class="form-grid form-grid-2" id="pf" novalidate>' +
           '<div class="input-group"><label class="input-label" for="pId">User ID</label><div class="input-wrap" style="background:var(--color-bg)"><input class="input" id="pId" value="' + p.id + '" readonly></div></div>' +
           '<div class="input-group"><label class="input-label" for="pName">Full name</label><div class="input-wrap"><input class="input" id="pName" value="' + esc(p.name) + '" autocomplete="name" required></div></div>' +
-          '<div class="input-group"><label class="input-label" for="pCountry">Country</label><div class="input-wrap"><select class="input" id="pCountry">' + COUNTRIES.map(function (c) { return '<option value="' + c[0] + '" data-code="' + c[1] + '"' + (c[0] === p.country ? " selected" : "") + ">" + c[0] + " (" + c[1] + ")</option>"; }).join("") + "</select>" + ico("i-chevron-down") + "</div></div>" +
+          '<div class="input-group"><label class="input-label" for="pCountry">Country</label><div class="input-wrap"><select class="input" id="pCountry">' + COUNTRIES.map(function (c) { return '<option value="' + c[0] + '" data-code="' + c[1] + '"' + (c[0] === p.country ? " selected" : "") + ">" + c[0] + " (" + c[1] + ")</option>"; }).join("") + "</select></div></div>" +
           '<div class="input-group"><label class="input-label" for="pMobile">Mobile</label><div class="input-wrap"><span class="input-addon" id="pCode">' + p.code + '</span><input class="input" id="pMobile" value="' + esc(p.mobile) + '" inputmode="tel" autocomplete="tel"></div></div>' +
           '<div class="input-group" style="grid-column:1/-1"><label class="input-label" for="pEmail">Email</label><div class="input-wrap" id="pEmailW"><input class="input" id="pEmail" type="email" value="' + esc(p.email) + '" autocomplete="email"></div><p class="input-hint" id="pEmailH"></p></div>' +
           '<div style="grid-column:1/-1;display:flex;gap:12px;justify-content:flex-end"><button type="button" class="btn btn-secondary" id="pReset" disabled>Discard</button><button class="btn btn-primary" id="pSave" disabled>Save changes</button></div>' +
         "</form></section>" +
-        '<div class="stack"><section class="card box"><div class="section-title"><h2>Preferences</h2></div><div class="rows card-controls">' +
-          '<div class="row-item"><span class="icon-tile tone-primary">' + ico("i-eye-off") + '</span><span class="row-main"><b>Hide balances</b><small>Blur amounts across the app</small></span><button class="switch" role="switch" id="prefMask" aria-checked="' + S.masked + '" aria-label="Hide balances"></button></div>' +
-          '<div class="row-item"><span class="icon-tile tone-primary">₹</span><span class="row-main"><b>Show values in</b><small>Currency for totals</small></span>' + curToggle().replace("cur-toggle", "segmented") + "</div>" +
-        "</div></section>" +
-        '<section class="card box"><div class="section-title"><h2>Demo data</h2></div><p class="body-sm">Balances and activity here are fictional and saved only in this browser.</p><button class="btn btn-secondary btn-block" style="margin-top:12px" id="demoReset">' + ico("i-refresh") + "Reset demo data</button></section></div></div>";
+        '<section class="card box" id="security"><div class="card-header"><div><h2 class="card-title">Security</h2><p class="card-desc">Update your password. Use one you don\'t use anywhere else.</p></div><span class="icon-tile icon-tile-sm tone-primary">' + ico("i-lock") + "</span></div>" + pwForm() + "</section>" +
+        '<section class="card box"><div class="card-header"><div><h2 class="card-title">Referral</h2><p class="card-desc">Share your link and invite friends to Grampe.</p></div><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
+          '<label class="input-label" for="pRef">Your referral link</label>' +
+          '<div class="ref-box" style="margin-top:8px"><span id="pRef">' + esc(p.refLink) + "</span></div>" +
+          '<div class="cta-row" style="margin-top:12px"><button class="btn btn-secondary btn-sm" data-copy="' + esc(p.refLink) + '" data-what="Referral link">' + ico("i-copy") + 'Copy</button><button class="btn btn-primary btn-sm" id="pShare">' + ico("i-share") + "Share</button></div></section>";
     },
     mount: function (v) {
       var f = $("#pf", v), p = S.profile, orig = JSON.stringify([p.name, p.country, p.mobile, p.email]);
@@ -795,40 +841,44 @@
       $("#pCountry", v).addEventListener("change", function (e) { $("#pCode", v).textContent = e.target.selectedOptions[0].dataset.code; check(); });
       $("#pReset", v).addEventListener("click", function () { render(); });
       f.addEventListener("submit", function (e) { e.preventDefault(); var x = vals(); p.name = x[0]; p.country = x[1]; p.code = $("#pCode", v).textContent; p.mobile = x[2]; p.email = x[3]; save(); refreshChrome(); toast("Profile updated", "i-user"); render(); });
-      $("#prefMask", v).addEventListener("click", function (e) { S.masked = !S.masked; e.currentTarget.setAttribute("aria-checked", String(S.masked)); save(); refreshChrome(); });
-      $("#demoReset", v).addEventListener("click", function () { confirmBox("Reset demo data?", "Balances, activity, gift cards and settings go back to the starting demo values.", "Reset", function () { S = fresh(); save(); refreshChrome(); toast("Demo data reset", "i-refresh"); render(); }); });
+      pwMount(v);
+      $("#pShare", v).addEventListener("click", function () { share(S.profile.refLink, "Join me on Grampe"); });
     }
   };
+
+  /* ---------- PASSWORD FORM (used on Profile and Security) ---------- */
+  function pwField(id, lab, ac, ph) { return '<div class="input-group"><label class="input-label" for="' + id + '">' + lab + '</label><div class="input-wrap" id="' + id + 'W"><input class="input" id="' + id + '" type="password" autocomplete="' + ac + '" placeholder="' + ph + '"><button type="button" class="icon-btn icon-btn-sm" data-eye="' + id + '" aria-label="Show password">' + ico("i-eye") + "</button></div></div>"; }
+  function pwForm() {
+    return '<form class="form-grid" id="secF" novalidate>' +
+      pwField("pwOld", "Old password", "current-password", "Enter your old password") +
+      pwField("pwNew", "New password", "new-password", "Enter your new password") +
+      '<div class="strength" id="pwS" data-s="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div><ul class="rules" id="pwR"><li data-r="len">At least 8 characters</li><li data-r="up">One uppercase letter</li><li data-r="num">One number</li><li data-r="sym">One symbol</li></ul>' +
+      pwField("pwNew2", "Retype new password", "new-password", "Retype your new password") + '<p class="input-hint" id="pwMatch"></p>' +
+      '<div class="form-actions"><button class="btn btn-primary" id="pwGo" disabled>Submit</button></div></form>';
+  }
+  function pwMount(v) {
+    var o = $("#pwOld", v), n = $("#pwNew", v), n2 = $("#pwNew2", v);
+    $$("[data-eye]", v).forEach(function (b) { b.addEventListener("click", function () { var i = $("#" + b.dataset.eye, v), show = i.type === "password"; i.type = show ? "text" : "password"; b.innerHTML = ico(show ? "i-eye-off" : "i-eye"); b.setAttribute("aria-label", show ? "Hide password" : "Show password"); }); });
+    function check() {
+      var p = n.value, r = { len: p.length >= 8, up: /[A-Z]/.test(p), num: /\d/.test(p), sym: /[^A-Za-z0-9]/.test(p) }, sc = Object.keys(r).filter(function (k) { return r[k]; }).length;
+      $("#pwS", v).dataset.s = p ? sc : 0;
+      $$("#pwR li", v).forEach(function (li) { li.classList.toggle("ok", r[li.dataset.r]); });
+      var match = n2.value && n2.value === p;
+      $("#pwMatch", v).className = "input-hint" + (n2.value ? (match ? " is-ok" : " is-error") : "");
+      $("#pwMatch", v).textContent = n2.value ? (match ? "Passwords match" : "Passwords don't match") : "";
+      $("#pwGo", v).disabled = !(o.value && sc === 4 && match && p !== o.value);
+    }
+    [o, n, n2].forEach(function (i) { i.addEventListener("input", check); });
+    $("#secF", v).addEventListener("submit", function (e) { e.preventDefault(); toast("Password updated", "i-lock"); $("#secF", v).reset(); check(); });
+  }
 
   /* ---------- SECURITY ---------- */
   PAGES.security = {
     html: function () {
-      function pw(id, lab, ac) { return '<div class="input-group"><label class="input-label" for="' + id + '">' + lab + '</label><div class="input-wrap" id="' + id + 'W"><input class="input" id="' + id + '" type="password" autocomplete="' + ac + '"><button type="button" class="icon-btn icon-btn-sm" data-eye="' + id + '" aria-label="Show password" style="border:0;box-shadow:none">' + ico("i-eye") + "</button></div></div>"; }
-      return '<div class="grid-2 grid-main"><section class="card box"><div class="section-title"><h2>Update password</h2><span class="icon-tile tone-primary">' + ico("i-lock") + "</span></div>" +
-        '<form class="form-grid" id="secF" novalidate>' + pw("pwOld", "Current password", "current-password") + pw("pwNew", "New password", "new-password") +
-        '<div class="strength" id="pwS" data-s="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div><ul class="rules" id="pwR"><li data-r="len">At least 8 characters</li><li data-r="up">One uppercase letter</li><li data-r="num">One number</li><li data-r="sym">One symbol</li></ul>' +
-        pw("pwNew2", "Confirm new password", "new-password") + '<p class="input-hint" id="pwMatch"></p>' +
-        '<button class="btn btn-primary btn-lg" id="pwGo" disabled>Change password</button></form>' +
-        '<p class="caption" style="margin-top:12px">Demo form · on the live site this updates your Grampe login.</p></section>' +
-        '<div class="stack"><section class="card box"><div class="section-title"><h2>Session</h2></div><div class="rows card-controls"><div class="row-item"><span class="icon-tile tone-success">' + ico("i-check") + '</span><span class="row-main"><b>This device</b><small>Active now · ' + esc(navigator.platform || "Browser") + "</small></span></div></div>" +
-        '<button class="btn btn-secondary btn-block" style="margin-top:12px;color:var(--color-danger)" data-action="logout">' + ico("i-logout") + "Log out</button></section>" +
-        '<section class="card box"><p class="note">' + ico("i-shield") + "Grampe will never ask for your password, OTP or recovery phrase over phone, email or chat.</p></section></div></div>";
+      return '<section class="card box"><div class="card-header"><div><h2 class="card-title">Update password</h2><p class="card-desc">Use a strong password you don\'t use anywhere else.</p></div><span class="icon-tile icon-tile-sm tone-primary">' + ico("i-lock") + "</span></div>" + pwForm() + "</section>" +
+        '<section class="card box"><p class="note">' + ico("i-shield") + "Grampe will never ask for your password, OTP or recovery phrase over phone, email or chat.</p></section>";
     },
-    mount: function (v) {
-      var o = $("#pwOld", v), n = $("#pwNew", v), n2 = $("#pwNew2", v);
-      $$("[data-eye]", v).forEach(function (b) { b.addEventListener("click", function () { var i = $("#" + b.dataset.eye, v), show = i.type === "password"; i.type = show ? "text" : "password"; b.innerHTML = ico(show ? "i-eye-off" : "i-eye"); b.setAttribute("aria-label", show ? "Hide password" : "Show password"); }); });
-      function check() {
-        var p = n.value, r = { len: p.length >= 8, up: /[A-Z]/.test(p), num: /\d/.test(p), sym: /[^A-Za-z0-9]/.test(p) }, s = Object.keys(r).filter(function (k) { return r[k]; }).length;
-        $("#pwS", v).dataset.s = p ? s : 0;
-        $$("#pwR li", v).forEach(function (li) { li.classList.toggle("ok", r[li.dataset.r]); });
-        var match = n2.value && n2.value === p;
-        $("#pwMatch", v).className = "input-hint" + (n2.value ? (match ? " is-ok" : " is-error") : "");
-        $("#pwMatch", v).textContent = n2.value ? (match ? "Passwords match" : "Passwords don't match") : "";
-        $("#pwGo", v).disabled = !(o.value && s === 4 && match && p !== o.value);
-      }
-      [o, n, n2].forEach(function (i) { i.addEventListener("input", check); });
-      $("#secF", v).addEventListener("submit", function (e) { e.preventDefault(); toast("Password updated (demo)", "i-lock"); $("#secF", v).reset(); check(); });
-    }
+    mount: function (v) { pwMount(v); }
   };
 
   /* ---------- confirm dialog ---------- */
@@ -839,8 +889,8 @@
 
   /* ---------- quick + more sheets, notifications ---------- */
   function quickSheet() {
-    var fab = $(".tab-fab"); fab.classList.add("open");
-    openPanel({ type: "sheet", title: "Quick actions", html: '<div class="action-grid">' + [["send", "i-send", "Send", "tone-primary"], ["receive", "i-receive", "Add fund", "tone-success"], ["swap", "i-swap", "Swap", "tone-violet"], ["transfer", "i-users", "Transfer", "tone-sky"], ["upi", "i-bolt", "UPI", "tone-warning"], ["gifts", "i-gift", "Gift card", "tone-warning"]].map(function (q) { return '<a href="#/' + q[0] + '"><span class="icon-tile ' + q[3] + '">' + ico(q[1]) + "</span>" + q[2] + "</a>"; }).join("") + "</div>", onClose: function () { fab.classList.remove("open"); } });
+    var fab = $(".tab-fab"); if (fab) fab.classList.add("open");
+    openPanel({ type: "sheet", title: "Quick actions", html: '<div class="action-grid">' + [["send", "i-send", "Send", "tone-primary"], ["receive", "i-receive", "Add fund", "tone-success"], ["swap", "i-swap", "Swap", "tone-violet"], ["transfer", "i-users", "Transfer", "tone-sky"], ["upi", "i-bolt", "UPI", "tone-warning"], ["gifts", "i-gift", "Gift card", "tone-warning"]].map(function (q) { return '<a href="#/' + q[0] + '"><span class="icon-tile ' + q[3] + '">' + ico(q[1]) + "</span>" + q[2] + "</a>"; }).join("") + "</div>", onClose: function () { if (fab) fab.classList.remove("open"); } });
   }
   function moreSheet() {
     openPanel({ type: "sheet", title: "All pages", html: '<div class="action-grid">' + ROUTES.map(function (r) { return '<a href="#/' + r.id + '"><span class="icon-tile tone-primary">' + ico(r.icon) + "</span>" + r.title + "</a>"; }).join("") + '<button data-action="logout"><span class="icon-tile tone-dark">' + ico("i-logout") + "</span>Log out</button></div>" });
@@ -849,38 +899,6 @@
     $(".tb-dot") && $(".tb-dot").remove();
     openPanel({ type: "drawer", title: "Notifications", html: '<div class="rows">' + D.notifications.map(function (n) { return '<div class="row-item"><span class="icon-tile ' + n.tone + '">' + ico(n.icon) + '</span><span class="row-main"><b>' + n.title + "</b><small>" + n.text + '</small></span><span class="caption">' + n.time + "</span></div>"; }).join("") + "</div>" });
   }
-
-  /* ---------- command palette ---------- */
-  var pal = $("#palette"), palInput = $("#palInput"), palList = $("#palList"), palIdx = 0, palItems = [];
-  function palData() {
-    return ROUTES.map(function (r) { return { g: "Pages", t: r.title, i: r.icon, k: r.group, run: function () { location.hash = "#/" + r.id; } }; })
-      .concat([
-        { g: "Actions", t: S.masked ? "Show balances" : "Hide balances", i: "i-eye", run: function () { S.masked = !S.masked; save(); refreshChrome(); render(); } },
-        { g: "Actions", t: "Show values in " + (S.cur === "INR" ? "USD" : "INR"), i: "i-globe", run: function () { S.cur = S.cur === "INR" ? "USD" : "INR"; save(); render(); } },
-        { g: "Actions", t: "Copy referral link", i: "i-copy", run: function () { copy(S.profile.refLink, "Referral link"); } },
-        { g: "Actions", t: "Log out", i: "i-logout", run: logout }
-      ])
-      .concat(S.assets.map(function (a) { return { g: "Assets", t: label(a) + " · " + a.name, i: "i-wallet", k: net(a.net).name, run: function () { assetDrawer(key(a)); } }; }));
-  }
-  function palDraw() {
-    var q = palInput.value.trim().toLowerCase(), g = "", html = "";
-    palItems = palData().filter(function (x) { return !q || (x.t + " " + (x.k || "") + " " + x.g).toLowerCase().indexOf(q) > -1; });
-    palIdx = Math.min(palIdx, Math.max(palItems.length - 1, 0));
-    palItems.forEach(function (x, i) { if (x.g !== g) { g = x.g; html += '<li class="pal-group" aria-hidden="true">' + g + "</li>"; } html += '<li role="option" data-i="' + i + '" class="' + (i === palIdx ? "active" : "") + '" aria-selected="' + (i === palIdx) + '">' + ico(x.i) + esc(x.t) + (x.k ? "<small>" + esc(x.k) + "</small>" : "") + "</li>"; });
-    palList.innerHTML = html || '<li class="pal-group">No results</li>';
-    var a = $("li.active", palList); if (a) a.scrollIntoView({ block: "nearest" });
-  }
-  function palOpen() { closePanel(); pal.classList.add("open"); pal.setAttribute("aria-hidden", "false"); palInput.value = ""; palIdx = 0; palDraw(); setTimeout(function () { palInput.focus(); }, 30); }
-  function palClose() { pal.classList.remove("open"); pal.setAttribute("aria-hidden", "true"); }
-  function palRun(i) { var x = palItems[i]; palClose(); if (x) setTimeout(x.run, 50); }
-  palInput.addEventListener("input", function () { palIdx = 0; palDraw(); });
-  palInput.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowDown") { e.preventDefault(); palIdx = Math.min(palIdx + 1, palItems.length - 1); palDraw(); }
-    if (e.key === "ArrowUp") { e.preventDefault(); palIdx = Math.max(palIdx - 1, 0); palDraw(); }
-    if (e.key === "Enter") { e.preventDefault(); palRun(palIdx); }
-  });
-  palList.addEventListener("click", function (e) { var li = e.target.closest("[data-i]"); if (li) palRun(+li.dataset.i); });
-  pal.addEventListener("click", function (e) { if (e.target === pal) palClose(); });
 
   function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "../index.html"; }); }
 
@@ -901,26 +919,24 @@
       if (a === "logout") { e.preventDefault(); closeMenu(); logout(); }
       if (a === "quick") quickSheet();
       if (a === "more") moreSheet();
+      if (a === "sb-open") sbOpen();
+      if (a === "sb-close") sbClose();
       return;
     }
     var as = t.closest("[data-asset]"); if (as && !t.closest("a")) { assetDrawer(as.dataset.asset); return; }
     var tx = t.closest("[data-tx]"); if (tx) { txDrawer(tx.dataset.tx); return; }
     if (t.closest("#panelBody a[href^='#/']")) closePanel();
   });
-  $("#openPalette").addEventListener("click", palOpen);
   $("#openNotif").addEventListener("click", notifPanel);
-  $("#sbCollapse").addEventListener("click", function () { S.sbCollapsed = !S.sbCollapsed; save(); refreshChrome(); });
 
   var userBtn = $("#userBtn"), userMenu = $("#userMenu");
   function closeMenu() { userMenu.hidden = true; userBtn.setAttribute("aria-expanded", "false"); }
   userBtn.addEventListener("click", function (e) { e.stopPropagation(); var open = userMenu.hidden; userMenu.hidden = !open; userBtn.setAttribute("aria-expanded", String(open)); if (open) $("a", userMenu).focus(); });
-  document.addEventListener("click", function (e) { if (!e.target.closest(".tb-user")) closeMenu(); });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".hd-user")) closeMenu(); if (!e.target.closest(".select")) closeSelects(); });
   userMenu.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
 
   document.addEventListener("keydown", function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); pal.classList.contains("open") ? palClose() : palOpen(); return; }
-    if (e.key === "/" && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); palOpen(); return; }
-    if (e.key === "Escape") { if (pal.classList.contains("open")) palClose(); else if (!userMenu.hidden) { closeMenu(); userBtn.focus(); } else closePanel(); }
+    if (e.key === "Escape") { if (!userMenu.hidden) { closeMenu(); userBtn.focus(); } else if (sbClose()) $(".hd-trigger").focus(); else closePanel(); }
   });
   window.addEventListener("scroll", function () { $("#topbar").classList.toggle("scrolled", window.scrollY > 4); }, { passive: true });
   window.addEventListener("hashchange", render);
