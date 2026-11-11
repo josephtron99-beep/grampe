@@ -380,3 +380,7 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
   .ui .page-head .cta-row { width: 100%; }
   .ui .page-head .cta-row .btn { flex: 1 1 calc(50% - 8px); }
 }
+
+/* sidebar groups (titled sections, no dropdown) */
+.sb-section + .sb-section { margin-top: 16px; }
+.sb-badge { margin-left: auto; padding: 0 6px; font-size: 11px; }

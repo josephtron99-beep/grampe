@@ -141,12 +141,12 @@
     { id: "wallet", title: "Wallet", group: "Overview", icon: "i-wallet", nav: "main" },
     { id: "swap", title: "Swap", group: "Products", icon: "i-swap", nav: "products" },
     { id: "cards", title: "RuPay card", group: "Products", icon: "i-card", nav: "products", badge: "Soon" },
-    { id: "staking", title: "Staking", group: "Products", icon: "i-layers", nav: "products", badge: "Soon" },
+    { id: "transfer", title: "Transfer", group: "Products", icon: "i-users", nav: "products" },
     { id: "referral", title: "Refer", group: "Products", icon: "i-share", nav: "products" },
+    { id: "staking", title: "Staking", group: "Products", icon: "i-layers" },
     { id: "history", title: "History", group: "Wallet", icon: "i-list" },
     { id: "send", title: "Send", group: "Wallet", icon: "i-send" },
     { id: "receive", title: "Add fund", group: "Wallet", icon: "i-receive" },
-    { id: "transfer", title: "Transfer", group: "Wallet", icon: "i-users" },
     { id: "upi", title: "UPI transfer", group: "Wallet", icon: "i-bolt" },
     { id: "gifts", title: "Gift cards", group: "Wallet", icon: "i-gift" },
     { id: "profile", title: "My profile", group: "Account", icon: "i-user" },
@@ -156,20 +156,12 @@
   function route() { return ROUTES.filter(function (r) { return r.id === current.id; })[0]; }
   var current = { id: "home", params: {} };
 
-  /* shadcn Sidebar: Home, Wallet, Products (collapsible: Swap, RuPay card, Staking, Refer) */
-  var productsOpen = null; // null = follow the route; true/false = user toggled
+  /* shadcn Sidebar: "Menu" (Home, Wallet) and "Products" (Swap, RuPay card, Transfer, Refer) groups */
   function buildSidebar() {
-    var main = ROUTES.filter(function (r) { return r.nav === "main"; }), prod = ROUTES.filter(function (r) { return r.nav === "products"; });
-    $("#sbNav").innerHTML = '<p class="sb-label">Menu</p><div class="sb-menu">' +
-      main.map(function (r) { return '<a class="sb-btn" href="#/' + r.id + '" data-route="' + r.id + '">' + ico(r.icon) + "<span>" + r.title + "</span></a>"; }).join("") +
-      '<button class="sb-btn" id="sbProducts" aria-expanded="false" aria-controls="sbProductsSub">' + ico("i-grid") + "<span>Products</span>" + ico("i-chevron-down", "ico chev") + "</button>" +
-      '<div class="sb-sub" id="sbProductsSub" hidden>' +
-      prod.map(function (r) { return '<a class="sb-subbtn" href="#/' + r.id + '" data-route="' + r.id + '"><span>' + r.title + "</span>" + (r.badge ? '<span class="badge badge-outline">' + r.badge + "</span>" : "") + "</a>"; }).join("") +
-      "</div></div>";
-    $("#sbProducts").addEventListener("click", function () { productsOpen = !isProductsOpen(); setProducts(productsOpen); });
+    function link(r) { return '<a class="sb-btn" href="#/' + r.id + '" data-route="' + r.id + '">' + ico(r.icon) + "<span>" + r.title + "</span>" + (r.badge ? '<span class="badge badge-outline sb-badge">' + r.badge + "</span>" : "") + "</a>"; }
+    function group(title, nav) { return '<div class="sb-section"><p class="sb-label">' + title + '</p><div class="sb-menu">' + ROUTES.filter(function (r) { return r.nav === nav; }).map(link).join("") + "</div></div>"; }
+    $("#sbNav").innerHTML = group("Menu", "main") + group("Products", "products");
   }
-  function isProductsOpen() { return $("#sbProducts").getAttribute("aria-expanded") === "true"; }
-  function setProducts(open) { $("#sbProducts").setAttribute("aria-expanded", String(open)); $("#sbProductsSub").hidden = !open; }
   function sbOpen() { $("#app").classList.add("sb-open"); $(".hd-trigger").setAttribute("aria-expanded", "true"); var f = $(".sb-btn", $("#sidebar")); if (f) f.focus(); }
   function sbClose() { var was = $("#app").classList.contains("sb-open"); $("#app").classList.remove("sb-open"); $(".hd-trigger").setAttribute("aria-expanded", "false"); return was; }
 
@@ -239,9 +231,6 @@
     var r = route(), P = PAGES[current.id];
     var navId = r.nav ? r.id : r.group === "Wallet" ? "wallet" : ""; // money pages light up Wallet
     $$("#sbNav [data-route]").forEach(function (a) { a.classList.toggle("active", a.dataset.route === navId); if (a.dataset.route === navId) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
-    var inProd = r.nav === "products";
-    $("#sbProducts").classList.toggle("has-active", inProd);
-    if (inProd) setProducts(true); else if (productsOpen === null) setProducts(false);
     sbClose();
     $("#tbTitle").textContent = r.title;
     $("#tbCrumb").textContent = r.group;
@@ -284,7 +273,6 @@
           '<a class="btn btn-sm" href="#/receive">' + ico("i-receive") + "Add fund</a>" +
           '<a class="btn btn-sm wl-ghost" href="#/swap">' + ico("i-swap") + "Swap</a>" +
           '<a class="btn btn-sm wl-ghost" href="#/transfer">' + ico("i-users") + "Transfer</a>" +
-          '<a class="btn btn-sm wl-ghost" href="#/upi">' + ico("i-bolt") + "UPI</a>" +
         "</div>" +
       "</section>" +
       '<section class="card box"><div class="card-header"><div><h2 class="card-title">Assets</h2><p class="card-desc">Your top holdings by value</p></div><a class="btn btn-ghost btn-sm" href="#/wallet">View all ' + ico("i-arrow") + "</a></div>" +
