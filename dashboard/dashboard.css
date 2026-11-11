@@ -292,3 +292,9 @@
   .chart .line.draw { stroke-dashoffset: 0; }
   .success circle, .success path { stroke-dashoffset: 0; }
 }
+
+/* ---------- Shrink-safety for grids and rows (phones) ---------- */
+.rows > *, .grid-2 > *, .stack > *, .flow > *, .feature-grid > *, .gift-grid > * { min-width: 0; }
+.flow-head { flex-wrap: wrap; }
+.row-end { flex: none; max-width: 45%; }
+.row-end b, .row-end small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }

@@ -47,6 +47,14 @@
   --avatar-1: #8B7CF6; --avatar-2: #F59E0B; --avatar-3: #10B981;
   --avatar-4: #EC4899; --avatar-5: #2F3BFF; --avatar-6: #F97316;
 
+  /* night palette (dark theme) */
+  --night-950: #04061A;
+  --night-900: #080C2B;
+  --night-800: #0F1640;
+  --night-700: #18215A;
+  --glow-blue: #5B6CFF;
+  --glow-violet: #8B5CFF;
+
   /* asset marks (dashboard) */
   --asset-eth: #627EEA; --asset-bnb: #F3BA2F; --asset-ton: #0098EA;
   --asset-usdt: #26A17B; --asset-xlm: #14181F; --asset-shop: #7B4DFF;
@@ -214,4 +222,39 @@
     --card-pad: var(--space-14);
     --tile-pad: var(--space-6);
   }
+}
+
+/* ==========================================================
+   THEME: NIGHT (dark) — re-maps semantic tokens only.
+   Usage: <html data-theme="night">. Components need no changes.
+   ========================================================== */
+[data-theme="night"] {
+  color-scheme: dark;
+  --color-bg: var(--night-950);
+  --color-surface: rgba(255, 255, 255, .045);
+  --color-surface-hover: rgba(255, 255, 255, .08);
+  --color-text: #F2F4FF;
+  --color-text-muted: var(--navy-300);
+  --color-border: rgba(255, 255, 255, .09);
+  --color-border-strong: rgba(91, 108, 255, .55);
+  --color-primary: var(--glow-blue);
+  --color-primary-hover: #7484FF;
+  --color-primary-soft: rgba(91, 108, 255, .16);
+  --color-dark: var(--night-700);
+  --color-dark-hover: var(--night-800);
+  --color-success-soft: rgba(65, 246, 154, .12);
+  --color-success: var(--mint-400);
+  --gray-50: rgba(255, 255, 255, .04);
+  --gray-200: rgba(255, 255, 255, .14);
+  --cream-50: rgba(245, 158, 11, .14);
+  --sky-50: rgba(61, 123, 255, .16);
+  --violet-50: rgba(139, 92, 255, .18);
+  --blue-50: rgba(91, 108, 255, .14);
+  --mint-50: rgba(65, 246, 154, .1);
+  --mint-200: rgba(65, 246, 154, .3);
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, .04) inset;
+  --shadow-md: 0 18px 40px -16px rgba(0, 0, 0, .7);
+  --shadow-lg: 0 30px 80px -20px rgba(0, 0, 0, .8);
+  --shadow-primary: 0 14px 34px -10px rgba(91, 108, 255, .7);
+  --ring-primary: 0 0 0 4px rgba(91, 108, 255, .25);
 }
