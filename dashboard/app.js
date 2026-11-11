@@ -927,6 +927,13 @@
     if (e.key === "Escape") { if (!userMenu.hidden) { closeMenu(); userBtn.focus(); } else if (sbClose()) $(".hd-trigger").focus(); else closePanel(); }
   });
   window.addEventListener("scroll", function () { $("#topbar").classList.toggle("scrolled", window.scrollY > 4); }, { passive: true });
+  /* amount fields accept numbers only (runs before each page's own input handler) */
+  document.addEventListener("input", function (e) {
+    var t = e.target, mode = t.getAttribute && t.getAttribute("inputmode");
+    if (mode !== "decimal" && mode !== "numeric") return;
+    var v = t.value, clean = mode === "numeric" ? v.replace(/\D/g, "") : v.replace(/,/g, ".").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+    if (clean !== v) { var pos = Math.max(0, (t.selectionStart || clean.length) - (v.length - clean.length)); t.value = clean; try { t.setSelectionRange(pos, pos); } catch (err) {} }
+  }, true);
   window.addEventListener("hashchange", render);
 
   /* ---------- boot ---------- */

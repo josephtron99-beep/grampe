@@ -384,3 +384,7 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
 /* sidebar groups (titled sections, no dropdown) */
 .sb-section + .sb-section { margin-top: 16px; }
 .sb-badge { margin-left: auto; padding: 0 6px; font-size: 11px; }
+
+/* big amount fields keep their size (swap, send, transfer, UPI) */
+.ui .swap-side .input { min-height: 44px; font-size: 28px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+@media (max-width: 479px) { .ui .swap-side .input { font-size: 24px; } }
