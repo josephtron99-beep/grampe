@@ -62,7 +62,7 @@
 
   /* ---------- top menu: underline sits on the current page, follows hover ---------- */
   var nav = $("#nav3"), ind = $("#navInd"), current = $(".n3.active");
-  function place(a) { if (!a || !ind) return; var n = nav.getBoundingClientRect(), r = a.getBoundingClientRect(); ind.style.width = (r.width - 16) + "px"; ind.style.transform = "translateX(" + (r.left - n.left + 8) + "px)"; }
+  function place(a) { if (!a || !ind) return; var n = nav.getBoundingClientRect(), r = a.getBoundingClientRect(); ind.style.width = r.width + "px"; ind.style.transform = "translateX(" + (r.left - n.left) + "px)"; }
   if (nav) {
     $$(".n3", nav).forEach(function (a) { a.addEventListener("mouseenter", function () { place(a); }); a.addEventListener("focus", function () { place(a); }); });
     nav.addEventListener("mouseleave", function () { place(current); });
