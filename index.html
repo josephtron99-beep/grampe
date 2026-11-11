@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.remove("no-js");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grampe Wallet | One India, One Grampe, One Wallet</title>
+  <meta name="description" content="One India. One Grampe. One Wallet. Pay any UPI ID or QR, recharge, pay bills, book travel and hold GINR, the stable rupee on Gram Chain.">
+  <meta name="theme-color" content="#0500FF">
+  <link rel="canonical" href="https://www.grampe.co/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Grampe Wallet | One India, One Grampe, One Wallet">
+  <meta property="og:description" content="UPI payments, recharges, bills, travel and GINR, the stable rupee on Gram Chain, in one wallet.">
+  <meta property="og:url" content="https://www.grampe.co/">
+  <link rel="icon" href="assets/img/shield.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Design system: tokens → components → page -->
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl-mark"><span class="pl-ring"></span><img src="assets/img/shield.svg" alt="" width="44" height="50"></div>
+  <div class="pl-bar"><i></i></div>
+</div>
+<script>setTimeout(function () { document.body.classList.add("is-loaded"); }, 3500);</script>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header" id="header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="logo" aria-label="Grampe home"><img src="assets/img/logo.png" alt="Grampe" width="140" height="32"></a>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <span class="nav-ind" aria-hidden="true"></span>
+      <a href="index.html" aria-current="page"><span class="icon-tile icon-tile-sm tone-primary nav-ico"><svg class="ico"><use href="assets/img/icons.svg#i-wallet"/></svg></span>Home</a>
+      <a href="services.html"><span class="icon-tile icon-tile-sm tone-primary nav-ico"><svg class="ico"><use href="assets/img/icons.svg#i-grid"/></svg></span>Services</a>
+      <a href="ginr.html"><span class="icon-tile icon-tile-sm tone-primary nav-ico">₹</span>GINR <span class="badge badge-sm badge-accent">New</span></a>
+      <a href="airdrop.html"><span class="icon-tile icon-tile-sm tone-primary nav-ico"><svg class="ico"><use href="assets/img/icons.svg#i-gift"/></svg></span>Airdrop</a>
+      <a href="download.html"><span class="icon-tile icon-tile-sm tone-primary nav-ico"><svg class="ico"><use href="assets/img/icons.svg#i-phone"/></svg></span>Download App</a>
+      <div class="nav-cta-mobile">
+        <a class="btn btn-secondary" href="https://www.grampe.co/Signin.html">Login</a>
+        <a class="btn btn-primary" href="https://www.grampe.co/signup.html">Create Account</a>
+      </div>
+      <p class="nav-help"><a href="https://t.me/GramchainNetwork" target="_blank" rel="noopener">Need help? Ask our Telegram community</a></p>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-dark btn-sm nav-login" href="https://www.grampe.co/Signin.html">
+        <span class="icon-tile icon-tile-sm icon-tile-round tone-glass"><svg class="ico"><use href="assets/img/icons.svg#i-lock"/></svg></span>Login / Create Account
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+
+<main id="main">
+
+<!-- ================= 1. BANNER ================= -->
+<section class="banner-wrap" aria-labelledby="hero-title">
+  <div class="blob b1" aria-hidden="true"></div>
+  <div class="blob b2" aria-hidden="true"></div>
+  <div class="blob b3" aria-hidden="true"></div>
+  <div class="container">
+    <div class="banner" id="banner">
+      <div class="banner-copy">
+        <p class="eyebrow anim-up" style="--d:0">Simple payments for everyone</p>
+        <h1 id="hero-title" class="display">
+          <span class="line"><span class="anim-up" style="--d:1">One India,</span></span>
+          <span class="line"><span class="anim-up" style="--d:2">One Grampe,</span></span>
+          <span class="line"><span class="anim-up text-primary" style="--d:3">One <span class="word-swap" id="wordSwap">Wallet</span></span></span>
+        </h1>
+        <p class="lead anim-up" style="--d:4">Upgrade your payments experience. Pay any UPI ID or QR, recharge, settle bills, book travel and hold GINR, all in one place.</p>
+        <div class="cta-row anim-up" style="--d:5">
+          <a class="btn btn-primary btn-lg magnetic" href="https://www.grampe.co/signup.html">Create Account <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a>
+          <a class="btn btn-secondary btn-lg" href="https://www.grampe.co/Signin.html">Login</a>
+        </div>
+        <ul class="trust anim-up" style="--d:6">
+          <li><span class="icon-tile icon-tile-sm tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>Instant 24×7</li>
+          <li><span class="icon-tile icon-tile-sm tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-shield"/></svg></span>Bank-grade security</li>
+          <li><span class="icon-tile icon-tile-sm tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-star"/></svg></span>Rewards on every pay</li>
+        </ul>
+      </div>
+
+      <div class="banner-visual" aria-hidden="true">
+        <div class="tilt" id="tilt">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="screen">
+              <div class="s-top"><img src="assets/img/shield.svg" alt="" width="20" height="22"><b>Grampe</b><span class="avatar avatar-sm avatar-soft">R</span></div>
+              <div class="s-bal">
+                <small>Wallet balance</small>
+                <strong>₹<span id="balance">48,752.95</span></strong>
+                <span class="badge badge-sm">▲ +₹1,240 today</span>
+              </div>
+              <div class="s-acts">
+                <span><i class="icon-tile tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-send"/></svg></i>Send</span>
+                <span><i class="icon-tile tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg></i>Scan</span>
+                <span><i class="icon-tile tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-receive"/></svg></i>Receive</span>
+              </div>
+              <div class="s-list">
+                <div class="s-row"><b class="coin coin-ginr">₹</b><span>GINR<small>Gram Chain</small></span><em>₹32,400</em></div>
+                <div class="s-row"><b class="coin coin-gcc"><img src="assets/img/shield.svg" alt="" width="14" height="16"></b><span>GCC<small>Gram Chain</small></span><em>₹12,120</em></div>
+                <div class="s-row"><b class="coin coin-bill"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></b><span>Electricity<small>Paid · +120 pts</small></span><em class="text-danger">−₹1,240</em></div>
+              </div>
+            </div>
+          </div>
+          <div class="float-note fn-1"><span class="icon-tile icon-tile-sm tone-success"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span><div><b>Paid ₹250</b><small>to any UPI ID</small></div></div>
+          <div class="float-note fn-2"><span class="coin coin-lg coin-ginr">₹</span><div><b>1 GINR = ₹1</b><small>The stable rupee</small></div></div>
+          <div class="float-note fn-3"><span class="qr-mini"><svg viewBox="0 0 21 21" aria-hidden="true"><path d="M0 0h7v7H0zM2 2v3h3V2zM14 0h7v7h-7zM16 2v3h3V2zM0 14h7v7H0zM2 16v3h3v-3zM9 0h2v2H9zM9 4h3v3H9zM9 9h3v2H9zM13 9h2v3h-2zM17 9h4v2h-4zM9 13h2v4H9zM12 14h3v2h-3zM16 13h2v2h-2zM14 17h3v4h-3zM19 15h2v6h-2zM9 19h3v2H9z"/></svg><i class="qr-scan"></i></span><div><b>Scan &amp; Pay</b><small>Any QR, any shop</small></div></div>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="off">
+          <span class="icon-tile icon-tile-sm icon-tile-round tone-accent"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>
+          <div><b id="toastT">₹1,240 paid</b><small id="toastS">to sharmastore@upi</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>UPI Payments</span><span>Mobile Recharge</span><span>Electricity Bill</span><span>FASTag</span><span>DTH</span><span>Metro</span><span>Flights</span><span>Hotels</span><span>GINR</span><span>RuPay Card</span><span>Staking</span><span>Rewards</span>
+        <span>UPI Payments</span><span>Mobile Recharge</span><span>Electricity Bill</span><span>FASTag</span><span>DTH</span><span>Metro</span><span>Flights</span><span>Hotels</span><span>GINR</span><span>RuPay Card</span><span>Staking</span><span>Rewards</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. RECHARGES & BILLS ================= -->
+<section id="bills" aria-labelledby="bills-title">
+  <div class="container">
+    <div class="card card-pad bills reveal">
+      <div>
+        <div class="card-head">
+          <h2 id="bills-title" class="card-title">Recharges &amp; Bill Payments</h2>
+          <a class="link" href="services.html#bills">View all <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a>
+        </div>
+        <div class="qa-grid stagger">
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-phone"/></svg></span>Mobile<br>Recharge</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>Electricity<br>Bill</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-tag"/></svg></span>FASTag<br>Recharge</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-tv"/></svg></span>DTH<br>Recharge</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-metro"/></svg></span>Metro<br>Recharge</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-shield"/></svg></span>Insurance<br>Premium</a>
+          <a href="services.html#bills" class="qa"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-gift"/></svg></span>Gift<br>Vouchers</a>
+          <a href="services.html" class="qa"><span class="icon-tile icon-tile-lg tone-dark"><svg class="ico"><use href="assets/img/icons.svg#i-grid"/></svg></span>View All<br>Services</a>
+        </div>
+      </div>
+      <div class="bills-side">
+        <a href="services.html#pay" class="tile tile-row tile-link qp">
+          <span class="icon-tile tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg><i class="scanline"></i></span>
+          <span><b class="tile-title">Scan &amp; Pay</b><small class="tile-text">Any QR, any shop</small></span>
+          <svg class="ico qp-go"><use href="assets/img/icons.svg#i-arrow"/></svg>
+        </a>
+        <a href="services.html#pay" class="tile tile-row tile-link qp">
+          <span class="icon-tile tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-send"/></svg></span>
+          <span><b class="tile-title">Transfer to UPI ID</b><small class="tile-text">Credit in 30 seconds</small></span>
+          <svg class="ico qp-go"><use href="assets/img/icons.svg#i-arrow"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="promos">
+      <a href="services.html#pay" class="promo promo-cream reveal spot">
+        <div><h3 class="title">Scan any QR or pay any UPI ID</h3><p class="body-sm">Instant, secure, 24×7</p><span class="btn btn-dark btn-sm">Explore payments</span></div>
+        <span class="icon-tile icon-tile-xl tone-white promo-qr"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg></span>
+      </a>
+      <a href="ginr.html" class="promo promo-mint reveal spot">
+        <div><h3 class="title">GINR — 1 GINR = ₹1</h3><p class="body-sm">The stable rupee on Gram Chain</p><span class="btn btn-dark btn-sm">Explore GINR</span></div>
+        <span class="coin coin-ginr promo-coin">₹</span>
+      </a>
+      <a href="services.html#card" class="promo promo-blue reveal spot">
+        <div><h3 class="title">Grampe RuPay Card</h3><p class="body-sm">Earn real cashback on time</p><span class="btn btn-dark btn-sm">See the card</span></div>
+        <span class="icon-tile icon-tile-xl tone-white promo-cardart"><svg class="ico"><use href="assets/img/icons.svg#i-card"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. TRAVEL ================= -->
+<section id="travel" aria-labelledby="travel-title">
+  <div class="container">
+    <div class="card travel reveal">
+      <div class="tv-hero">
+        <div class="tv-sky" aria-hidden="true">
+          <span class="cloud cl1"></span><span class="cloud cl2"></span><span class="cloud cl3"></span><span class="cloud cl4"></span>
+          <svg class="tv-flight" viewBox="0 0 1000 260" preserveAspectRatio="xMidYMid slice">
+            <path id="tvPath" class="tv-trail" d="M-40 230 C 220 60, 560 10, 1040 120"/>
+            <g class="tv-plane"><path d="M14 0 L-4 -3.5 L-9 -15 L-14 -15 L-10 -3.5 L-17 -3 L-21 -8 L-24 -8 L-22 0 L-24 8 L-21 8 L-17 3 L-10 3.5 L-14 15 L-9 15 L-4 3.5 Z"/><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#tvPath"/></animateMotion></g>
+            <circle cx="120" cy="190" r="3"/><circle cx="880" cy="96" r="3"/><circle cx="640" cy="40" r="2"/><circle cx="300" cy="70" r="2"/>
+          </svg>
+        </div>
+        <div class="tv-head">
+          <div>
+            <p class="eyebrow eyebrow-on-dark">Travel</p>
+            <h2 id="travel-title" class="h2">Book Travel</h2>
+            <p class="tv-sub">Flights, buses, trains and hotels across India and beyond.</p>
+          </div>
+          <div class="tv-pay"><span>Pay with</span><span class="badge badge-lg badge-glass">UPI</span><span class="badge badge-lg badge-glass">Card</span><span class="badge badge-lg badge-accent">GINR</span></div>
+        </div>
+      </div>
+
+      <div class="tv-panel">
+        <div class="tabs" role="tablist" aria-label="Travel type">
+          <button role="tab" aria-selected="true" aria-controls="bk" id="t-flights" data-mode="flights"><i class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-plane"/></svg></i>Flights</button>
+          <button role="tab" aria-selected="false" aria-controls="bk" id="t-bus" data-mode="bus" tabindex="-1"><i class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bus"/></svg></i>Bus</button>
+          <button role="tab" aria-selected="false" aria-controls="bk" id="t-trains" data-mode="trains" tabindex="-1"><i class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-train"/></svg></i>Trains</button>
+          <button role="tab" aria-selected="false" aria-controls="bk" id="t-hotels" data-mode="hotels" tabindex="-1"><i class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bed"/></svg></i>Hotels</button>
+        </div>
+
+        <div class="tv-bar">
+          <div class="segmented" id="trip" role="radiogroup" aria-label="Trip type">
+            <button type="button" role="radio" aria-checked="true" data-trip="one">One way</button>
+            <button type="button" role="radio" aria-checked="false" data-trip="round">Round trip</button>
+          </div>
+          <span class="tv-note"><svg class="ico"><use href="assets/img/icons.svg#i-star"/></svg>Earn reward points on every booking</span>
+        </div>
+
+        <div class="bk" id="bk" role="tabpanel" aria-labelledby="t-flights">
+          <div class="field"><small class="field-label" data-l1>From</small><b class="field-value" data-v1>Delhi</b><span class="field-hint" data-s1>DEL · Indira Gandhi Intl</span></div>
+          <button class="icon-btn icon-btn-sm bk-swap" id="bkSwap" type="button" aria-label="Swap from and to"><svg class="ico"><use href="assets/img/icons.svg#i-swap"/></svg></button>
+          <div class="field"><small class="field-label" data-l2>To</small><b class="field-value" data-v2>Mumbai</b><span class="field-hint" data-s2>BOM · Chhatrapati Shivaji</span></div>
+          <div class="field"><small class="field-label" data-l3>Depart</small><b class="field-value" data-v3 id="bkDate">—</b><span class="field-hint" data-s3>One way</span></div>
+          <div class="field"><small class="field-label" data-l4>Travellers</small><b class="field-value" data-v4>1 Traveller</b><span class="field-hint" data-s4>Economy</span></div>
+          <a class="btn btn-primary btn-lg bk-go" href="https://www.grampe.co/Signin.html"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg><span>Search</span></a>
+        </div>
+
+        <div class="popular">
+          <span class="caption pop-label">Popular</span>
+          <div class="pop-list" id="popular"></div>
+        </div>
+      </div>
+
+      <div class="tv-also">
+        <a href="services.html#bills" class="tile tile-row tile-link"><span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-tag"/></svg></span><span><b class="tile-title">FASTag recharge</b><small class="tile-text">Smooth toll payments</small></span></a>
+        <a href="services.html#travel" class="tile tile-row tile-link"><span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-metro"/></svg></span><span><b class="tile-title">Metro tickets</b><small class="tile-text">Skip the queue</small></span></a>
+        <a href="services.html#travel" class="tile tile-row tile-link"><span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-car"/></svg></span><span><b class="tile-title">Cabs</b><small class="tile-text">Rides around town</small></span></a>
+        <a href="services.html#travel" class="tile tile-row tile-link"><span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-life"/></svg></span><span><b class="tile-title">Roadside assistance</b><small class="tile-text">Help when you need it</small></span></a>
+      </div>
+    </div>
+
+    <div class="section-head-row reveal">
+      <h2 class="h3">Fly anywhere, <span class="text-primary">pay with Grampe</span></h2>
+      <div class="arrows"><button class="icon-btn arr" data-scroll="fly" data-dir="-1" aria-label="Previous"><svg class="ico flip"><use href="assets/img/icons.svg#i-arrow"/></svg></button><button class="icon-btn arr" data-scroll="fly" data-dir="1" aria-label="Next"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></button></div>
+    </div>
+    <div class="rail" id="fly">
+      <a href="services.html#travel" class="fly fly-blue reveal">
+        <div class="fly-top"><span class="badge badge-glass">Domestic</span><span class="fly-price">from ₹2,899</span></div>
+        <svg class="route" viewBox="0 0 300 120" aria-hidden="true"><path id="r1" d="M20 95 Q150 -15 280 95" class="route-path"/><circle cx="20" cy="95" r="5" class="route-dot"/><circle cx="280" cy="95" r="5" class="route-dot"/><g class="route-plane"><path d="M-9 0 9 0M3-6 9 0 3 6M-5-4l2 4-2 4" /><animateMotion dur="3.6s" repeatCount="indefinite" rotate="auto"><mpath href="#r1"/></animateMotion></g></svg>
+        <div class="fly-codes"><b>DEL</b><b>BOM</b></div>
+        <div class="fly-foot"><strong>Delhi · Mumbai</strong><span class="icon-tile icon-tile-round tone-glass"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div>
+      </a>
+      <a href="services.html#travel" class="fly fly-navy reveal">
+        <div class="fly-top"><span class="badge badge-glass">International</span><span class="fly-price">from ₹9,450</span></div>
+        <svg class="route" viewBox="0 0 300 120" aria-hidden="true"><path id="r2" d="M20 95 Q150 -15 280 95" class="route-path"/><circle cx="20" cy="95" r="5" class="route-dot"/><circle cx="280" cy="95" r="5" class="route-dot"/><g class="route-plane"><path d="M-9 0 9 0M3-6 9 0 3 6M-5-4l2 4-2 4" /><animateMotion dur="4.2s" repeatCount="indefinite" rotate="auto"><mpath href="#r2"/></animateMotion></g></svg>
+        <div class="fly-codes"><b>DXB</b><b>SIN</b></div>
+        <div class="fly-foot"><strong>Dubai · Singapore</strong><span class="icon-tile icon-tile-round tone-glass"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div>
+      </a>
+      <a href="services.html#travel" class="fly fly-mint reveal">
+        <div class="fly-top"><span class="badge badge-outline">Weekend getaways</span><span class="fly-price">from ₹3,199</span></div>
+        <svg class="route" viewBox="0 0 300 120" aria-hidden="true"><path id="r3" d="M20 95 Q150 -15 280 95" class="route-path"/><circle cx="20" cy="95" r="5" class="route-dot"/><circle cx="280" cy="95" r="5" class="route-dot"/><g class="route-plane"><path d="M-9 0 9 0M3-6 9 0 3 6M-5-4l2 4-2 4" /><animateMotion dur="3.9s" repeatCount="indefinite" rotate="auto"><mpath href="#r3"/></animateMotion></g></svg>
+        <div class="fly-codes"><b>GOI</b><b>JAI</b></div>
+        <div class="fly-foot"><strong>Goa · Jaipur</strong><span class="icon-tile icon-tile-round tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div>
+      </a>
+      <a href="services.html#travel" class="fly fly-sky reveal">
+        <div class="fly-top"><span class="badge badge-outline">Last-minute</span><span class="fly-price"><i class="live-dot live-dot-danger"></i>Fly today</span></div>
+        <svg class="route" viewBox="0 0 300 120" aria-hidden="true"><path id="r4" d="M20 95 Q150 -15 280 95" class="route-path"/><circle cx="20" cy="95" r="5" class="route-dot"/><circle cx="280" cy="95" r="5" class="route-dot"/><g class="route-plane"><path d="M-9 0 9 0M3-6 9 0 3 6M-5-4l2 4-2 4" /><animateMotion dur="3.2s" repeatCount="indefinite" rotate="auto"><mpath href="#r4"/></animateMotion></g></svg>
+        <div class="fly-codes"><b>NOW</b><b>ANY</b></div>
+        <div class="fly-foot"><strong>Departing in hours</strong><span class="icon-tile icon-tile-round tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div>
+      </a>
+    </div>
+
+    <div class="section-head-row reveal">
+      <h2 class="h3">Stays you'll love, <span class="text-primary">booked on Grampe</span></h2>
+      <div class="arrows"><button class="icon-btn arr" data-scroll="stays" data-dir="-1" aria-label="Previous"><svg class="ico flip"><use href="assets/img/icons.svg#i-arrow"/></svg></button><button class="icon-btn arr" data-scroll="stays" data-dir="1" aria-label="Next"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></button></div>
+    </div>
+    <div class="rail" id="stays">
+      <a href="services.html#travel" class="stay reveal"><img src="assets/img/stays/city.jpg" alt="City hotel skyline at dusk" loading="lazy" width="900" height="675"><div class="stay-cap"><b>City Hotels</b><span>Business &amp; leisure stays <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div></a>
+      <a href="services.html#travel" class="stay reveal"><img src="assets/img/stays/heritage.jpg" alt="Heritage palace" loading="lazy" width="900" height="675"><div class="stay-cap"><b>Heritage Palaces</b><span>Royal Rajasthan &amp; more <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div></a>
+      <a href="services.html#travel" class="stay reveal"><img src="assets/img/stays/backwaters.jpg" alt="Kerala backwater resort" loading="lazy" width="900" height="675"><div class="stay-cap"><b>Backwater Resorts</b><span>Houseboats &amp; lakeside <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div></a>
+      <a href="services.html#travel" class="stay reveal"><img src="assets/img/stays/beach.jpg" alt="Beach resort" loading="lazy" width="900" height="675"><div class="stay-cap"><b>Beach Resorts</b><span>Goa, Andaman &amp; beyond <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. PAY ANYONE ================= -->
+<section id="pay" aria-labelledby="pay-title">
+  <div class="container">
+    <div class="card card-pad pay reveal">
+      <div class="section-head">
+        <p class="eyebrow">Payments</p>
+        <h2 id="pay-title" class="h2">Grampe <span class="text-primary">simplifying</span> the way you pay</h2>
+        <p class="sub">Pay anyone, everywhere. Make contactless &amp; secure payments in-store or online, plus send &amp; receive money from anyone.</p>
+        <ul class="check-list check-list-2 stagger">
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Scan any QR or pay any UPI ID</li>
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Instantly settle bills &amp; get exciting rewards</li>
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Add funds through Cards, Wallet or UPI</li>
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Transfer and credit in 30 seconds</li>
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Share to any QR or UPI ID</li>
+          <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Available to use across the globe</li>
+        </ul>
+        <a class="btn btn-primary magnetic" href="https://www.grampe.co/signup.html">Create Account <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a>
+      </div>
+      <div class="pay-visual" id="payVisual" aria-hidden="true">
+        <div class="ring ring-1"></div><div class="ring ring-2"></div>
+        <span class="avatar avatar-1 pv pv-a" data-p="a1">A</span><span class="avatar avatar-2 pv pv-r" data-p="a2">R</span><span class="avatar avatar-3 pv pv-s" data-p="a3">S</span><span class="avatar avatar-4 pv pv-k" data-p="a4">K</span><span class="avatar avatar-5 pv pv-m" data-p="a5">M</span><span class="avatar avatar-6 pv pv-p" data-p="a6">P</span>
+        <div class="bubble" id="payBubble"><i class="coin coin-sm coin-upi" id="payBubbleCoin">₹</i><span id="payBubbleText">Send ₹1,240 via UPI</span></div>
+        <div class="receipt" id="payReceipt">
+          <span class="badge badge-primary r-tag" id="payTag">UPI</span>
+          <svg class="tick" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="m15 27 7 7 15-16"/></svg>
+          <p class="r-amt" id="payAmt">₹1,240</p>
+          <p class="body-sm r-to" id="payTo">Paid to sharmastore@upi</p>
+          <div class="r-rows"><div><span>Method</span><b id="payMethod">UPI</b></div><div><span>Time taken</span><b id="payTime">2.4 sec</b></div><div><span>Reward</span><b class="text-success" id="payReward">+40 pts</b></div></div>
+          <p class="r-ok"><span class="badge badge-lg badge-success" id="payOk">✓ Payment successful</span></p>
+        </div>
+      </div>
+    </div>
+
+    <a class="tg-strip reveal" href="https://t.me/GramchainNetwork" target="_blank" rel="noopener">
+      <span class="icon-tile icon-tile-round tone-glass"><svg class="ico"><use href="assets/img/icons.svg#i-tg"/></svg></span>
+      <span class="tg-text">Trusted community support on Telegram to assist and help you</span>
+      <span class="btn btn-light btn-sm">Join now <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span>
+    </a>
+  </div>
+</section>
+
+<!-- ================= 5. GINR ================= -->
+<section id="ginr" aria-labelledby="ginr-title">
+  <div class="container">
+    <div class="card card-pad ginr reveal">
+      <div class="ginr-grid">
+        <div class="section-head">
+          <p class="eyebrow">New on Grampe <span class="badge badge-sm badge-accent">GINR</span></p>
+          <h2 id="ginr-title" class="h2">Meet GINR,<br><span class="text-primary">the stable rupee</span></h2>
+          <p class="sub">GINR (GramINR) is a rupee stablecoin on Gram Chain, designed to hold 1:1 with the Indian rupee. The speed and reach of crypto, without the price swings.</p>
+          <div class="feats stagger">
+            <div class="tile"><b class="tile-title">Stable by design</b><span class="tile-text">Pegged 1:1 to the Indian rupee</span></div>
+            <div class="tile"><b class="tile-title">Settles in seconds</b><span class="tile-text">~3-second blocks, 24×7, tiny fees</span></div>
+            <div class="tile"><b class="tile-title">Spend it like cash</b><span class="tile-text">Scan &amp; pay, settle bills, top up your card</span></div>
+            <div class="tile"><b class="tile-title">Open &amp; transparent</b><span class="tile-text">Every transfer is public on gccscan</span></div>
+          </div>
+        </div>
+        <div class="conv">
+          <div class="coin3d" id="coin" title="Tap to flip"><div class="coin-face front">₹<small>GINR</small></div><div class="coin-face back"><img src="assets/img/shield.svg" alt="" width="40" height="45"></div></div>
+          <label><span class="field-label">You pay</span><span class="field field-control"><input id="cvIn" type="text" inputmode="decimal" value="10,000" aria-label="Amount in INR"><b>INR</b></span></label>
+          <div class="cv-chips" role="group" aria-label="Quick amounts"><button class="chip" data-amt="500">₹500</button><button class="chip" data-amt="2000">₹2,000</button><button class="chip" data-amt="10000">₹10,000</button></div>
+          <div class="icon-tile icon-tile-round tone-solid cv-mid"><svg class="ico"><use href="assets/img/icons.svg#i-receive"/></svg></div>
+          <div><span class="field-label">You get</span><span class="field field-control"><output id="cvOut" for="cvIn" aria-live="polite">10,000.00</output><b class="text-success">GINR</b></span></div>
+          <p class="caption cv-note">Always 1 : 1 — no slippage on the rupee peg.</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="tile stat"><span class="caption">Total supply</span><b class="stat-value"><span class="count" id="stSupply" data-to="10000000">1,00,00,000</span></b><span class="caption">GINR</span></div>
+        <div class="tile stat"><span class="caption">Holders</span><b class="stat-value"><span class="count" id="stHolders" data-to="4568">4,568</span></b><span class="caption" id="stLive">from gccscan</span></div>
+        <div class="tile stat"><span class="caption">Network</span><b class="stat-value">Gram Chain</b><span class="caption">Chain ID 72591</span></div>
+        <div class="tile stat stat-c">
+          <span class="caption">Contract (ERC-20) <span class="live"><i class="live-dot"></i>Live from gccscan</span></span>
+          <b class="stat-value mono">0x67E5…86f5</b>
+          <div class="c-btns">
+            <button class="chip" id="copyAddr" data-addr="0x67E53850C46845c879519dc114a3aa3B2A5286f5"><svg class="ico"><use href="assets/img/icons.svg#i-copy"/></svg><span>Copy</span></button>
+            <a class="chip" href="https://gccscan.com/token/0x67E53850C46845c879519dc114a3aa3B2A5286f5" target="_blank" rel="noopener">View <svg class="ico"><use href="assets/img/icons.svg#i-ext"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <ol class="steps" id="steps">
+        <li class="tile tile-row step"><b class="icon-tile icon-tile-sm icon-tile-round tone-primary step-num">1</b><div><strong class="tile-title">Add rupees</strong><span class="tile-text">Top up with UPI, card or bank transfer</span></div></li>
+        <li class="tile tile-row step"><b class="icon-tile icon-tile-sm icon-tile-round tone-primary step-num">2</b><div><strong class="tile-title">Get GINR</strong><span class="tile-text">Convert at exactly 1 : 1</span></div></li>
+        <li class="tile tile-row step"><b class="icon-tile icon-tile-sm icon-tile-round tone-primary step-num">3</b><div><strong class="tile-title">Send or spend</strong><span class="tile-text">Pay any QR or UPI ID, or hold — the value stays put</span></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. CARD + SECURITY ================= -->
+<section id="card" aria-labelledby="card-title">
+  <div class="container duo">
+    <article class="card card-pad dcard reveal">
+      <div class="section-head">
+        <p class="eyebrow">RuPay Card</p>
+        <h2 id="card-title" class="h3">Elevate your <span class="text-primary">debit card</span> experience</h2>
+        <p class="sub">Get regular, on-time reminders, instantly settle your bills, see detailed analytics of your spends and earn real cashback on timely settlements.</p>
+      </div>
+      <a class="link" href="services.html#card">Learn more <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a>
+      <div class="card3d-wrap">
+        <div class="card3d" id="card3d"><img src="assets/img/card_active.png" alt="Grampe Gram Chain RuPay debit card" width="596" height="303"><span class="glare"></span></div>
+      </div>
+    </article>
+    <article class="card card-pad reveal" aria-labelledby="sec-title">
+      <div class="section-head">
+        <p class="eyebrow">Security</p>
+        <h2 id="sec-title" class="h3">Security <span class="text-primary">above everything</span></h2>
+        <p class="sub">All your personal information and transactions are for your eyes only. Top-notch encryption and tight security ensure it stays that way.</p>
+      </div>
+      <div class="feature-badges"><span class="badge badge-lg badge-outline">Fingerprint &amp; Face ID login</span><span class="badge badge-lg badge-outline">Track all transactions</span><span class="badge badge-lg badge-outline">Instant app notifications</span></div>
+      <div class="shield-stage" aria-hidden="true">
+        <span class="pulse"></span><span class="pulse pulse-2"></span><span class="pulse pulse-3"></span>
+        <img src="assets/img/shield.svg" alt="" width="130" height="147" class="shield-img">
+        <span class="scan-beam"></span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 7. WEALTH ================= -->
+<section id="wealth" aria-labelledby="wealth-title">
+  <div class="container">
+    <div class="section-head-split reveal">
+      <div><p class="eyebrow">Wealth</p><h2 id="wealth-title" class="h2">Build, protect &amp; <span class="text-primary">grow</span> your money</h2></div>
+      <p class="sub">Investment, insurance and lending — all from your Grampe wallet.</p>
+    </div>
+    <div class="wealth stagger">
+      <a class="tile tile-link wealth-tile tone-fill-primary" href="services.html#wealth"><span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-chart"/></svg></span><h3 class="title title-lg">Investment</h3><p class="tile-text">Build, manage &amp; grow your wealth</p><span class="link">Invest now <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></a>
+      <a class="tile tile-link wealth-tile tone-fill-success" href="services.html#wealth"><span class="icon-tile icon-tile-lg tone-success"><svg class="ico"><use href="assets/img/icons.svg#i-umbrella"/></svg></span><h3 class="title title-lg">Insurance</h3><p class="tile-text">Protect, plan &amp; secure your future</p><span class="link">Get covered <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></a>
+      <a class="tile tile-link wealth-tile tone-fill-warning" href="services.html#wealth"><span class="icon-tile icon-tile-lg tone-warning"><svg class="ico"><use href="assets/img/icons.svg#i-coins"/></svg></span><h3 class="title title-lg">Lending</h3><p class="tile-text">Access quick, transparent &amp; secure loans</p><span class="link">Check offers <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></a>
+      <a class="tile tile-link wealth-tile tone-fill-violet" href="services.html#wealth"><span class="icon-tile icon-tile-lg tone-violet"><svg class="ico"><use href="assets/img/icons.svg#i-layers"/></svg></span><h3 class="title title-lg">Staking</h3><p class="tile-text">Put your crypto to work on Gram Chain</p><span class="link">Start staking <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></span></a>
+    </div>
+    <p class="fine-print">Returns on investment and staking vary and are not guaranteed.</p>
+  </div>
+</section>
+
+<!-- ================= 8. LOYALTY ================= -->
+<section id="rewards" aria-labelledby="loyal-title">
+  <div class="container">
+    <div class="card card-pad loyal reveal">
+      <div class="section-head">
+        <p class="eyebrow">Rewards</p>
+        <h2 id="loyal-title" class="h2">The loyalty programme that <span class="text-primary">pays you back</span></h2>
+        <p class="sub">Make connections, collect points and be rewarded. Nearly all transactions earn you points — exchange them for cash rewards, bonuses and more.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary magnetic" href="https://www.grampe.co/signup.html">Create Account</a>
+          <a class="btn btn-secondary" href="https://www.grampe.co/Signin.html">Login</a>
+        </div>
+      </div>
+      <div class="pts">
+        <div class="pts-ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0500FF"/><stop offset="1" stop-color="#41F69A"/></linearGradient></defs><circle cx="60" cy="60" r="52" class="pr-bg"/><circle cx="60" cy="60" r="52" class="pr-fg" id="ptsRing"/></svg>
+          <div class="pts-num"><b id="ptsNum" aria-live="polite">0</b><small class="caption">points</small></div>
+        </div>
+        <p class="caption">Tap an action to earn points</p>
+        <div class="pts-list" role="group" aria-label="Try earning points">
+          <button class="tile tile-row tile-link" data-pts="40"><span class="badge badge-success">+40</span>UPI payment</button>
+          <button class="tile tile-row tile-link" data-pts="120"><span class="badge badge-success">+120</span>Bill settled on time</button>
+          <button class="tile tile-row tile-link" data-pts="250"><span class="badge badge-success">+250</span>Friend joined</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo-foot"><img src="assets/img/shield.svg" alt="" width="30" height="34"><span>Grampe</span></a>
+        <p>One India. One Grampe. One Wallet. Pay, recharge, travel and save — simple payments for everyone.</p>
+        <a class="icon-btn icon-btn-glass social" href="https://t.me/GramchainNetwork" target="_blank" rel="noopener" aria-label="Grampe on Telegram"><svg class="ico"><use href="assets/img/icons.svg#i-tg"/></svg></a>
+      </div>
+      <details class="foot-group" open><summary><h4>Grampe</h4></summary><nav aria-label="Grampe"><a href="index.html">Home</a><a href="services.html">Services</a><a href="ginr.html">GINR</a><a href="airdrop.html">Airdrop</a><a href="download.html">Download App</a></nav></details>
+      <details class="foot-group" open><summary><h4>Services</h4></summary><nav aria-label="Services"><a href="services.html#bills">Recharges &amp; Bills</a><a href="services.html#pay">UPI Payments</a><a href="services.html#travel">Travel</a><a href="services.html#card">RuPay Card</a><a href="services.html#wealth">Wealth</a></nav></details>
+      <details class="foot-group" open><summary><h4>Account &amp; community</h4></summary><nav aria-label="Account and community"><a href="https://www.grampe.co/Signin.html">Login</a><a href="https://www.grampe.co/signup.html">Create Account</a><a href="https://www.grampe.co/forgot-password.html">Forgot password</a><a href="https://t.me/GramchainNetwork" target="_blank" rel="noopener">Telegram</a><a href="https://gccscan.com/" target="_blank" rel="noopener">Gram Chain explorer</a></nav></details>
+    </div>
+    <div class="foot-about">
+      <h4>Grampe — one wallet for everyday payments</h4>
+      <p>Grampe brings everyday payments and digital assets together in one simple wallet. Scan any QR or pay any UPI ID, recharge your mobile, DTH, FASTag and metro card, pay electricity bills and insurance premiums, book flights, buses, trains and hotels, and hold GINR — the stable rupee on Gram Chain.</p>
+    </div>
+    <div class="foot-bottom"><span>© <span id="year">2026</span> Grampe. All rights reserved.</span><span>Crypto assets carry risk. GINR is a digital token on Gram Chain.</span></div>
+  </div>
+</footer>
+
+<div class="mobile-cta" id="mobileCta" inert>
+  <a class="btn btn-secondary" href="https://www.grampe.co/Signin.html">Login</a>
+  <a class="btn btn-primary" href="https://www.grampe.co/signup.html">Create Account</a>
+</div>
+
+<button class="icon-btn icon-btn-primary to-top" id="toTop" aria-label="Back to top"><svg class="ico"><use href="assets/img/icons.svg#i-up"/></svg></button>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

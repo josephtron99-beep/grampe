@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grampe Design System</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/img/shield.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    /* page-only layout for the reference sheet (uses tokens) */
+    .ds { padding: var(--space-10) 0 var(--space-22); }
+    .ds-section { margin-top: var(--space-14); }
+    .ds-section > .h3 { margin-bottom: var(--space-2); }
+    .ds-section > .sub { margin-bottom: var(--space-6); }
+    .ds-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+    .ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--space-3); }
+    .ds-panel { padding: var(--space-6); }
+    .ds-panel + .ds-panel { margin-top: var(--space-4); }
+    .ds-label { display: block; margin-bottom: var(--space-3); }
+    .swatch { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+    .swatch i { display: block; height: 64px; }
+    .swatch div { padding: var(--space-3); }
+    .swatch b { display: block; font-size: var(--fs-sm); }
+    .swatch code, .ds code { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--color-text-muted); }
+    .type-row { display: grid; grid-template-columns: 120px 1fr; align-items: baseline; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px dashed var(--color-border); }
+    .space-bar { height: 12px; border-radius: 3px; background: var(--color-primary); }
+    .radius-box { width: 72px; height: 72px; background: var(--color-primary-soft); border: 1.5px solid var(--color-border-strong); }
+    .shadow-box { width: 120px; height: 80px; border-radius: var(--radius-md); background: var(--color-surface); }
+    .on-blue { padding: var(--space-5); border-radius: var(--radius-md); background: var(--grad-sky); }
+    .rules li { padding: var(--space-2) 0; border-bottom: 1px dashed var(--color-border); font-size: var(--fs-md); }
+  </style>
+</head>
+<body>
+<main class="container ds">
+  <div class="section-head">
+    <p class="eyebrow">Grampe · Design system</p>
+    <h1 class="display">Design system</h1>
+    <p class="sub">Tokens and components shared by every Grampe page. Styles live in <code>assets/css/tokens.css</code> and <code>assets/css/components.css</code>. Page files (like <code>home.css</code>) only arrange these parts.</p>
+  </div>
+
+  <!-- RULES -->
+  <section class="ds-section">
+    <h2 class="h3">Rules</h2>
+    <ul class="rules card ds-panel">
+      <li>Use semantic colour tokens (<code>--color-primary</code>, <code>--color-text-muted</code>…). No hex values in components or page CSS.</li>
+      <li>Font sizes come from the type scale (<code>--fs-*</code>). Headings use <code>.display</code>, <code>.h2</code>, <code>.h3</code>, <code>.title</code>.</li>
+      <li>Spacing uses the 4px scale (<code>--space-*</code>) and the rhythm tokens: <code>--section-gap</code>, <code>--group-gap</code>, <code>--block-gap</code>, <code>--grid-gap</code>, <code>--card-pad</code>, <code>--tile-pad</code>.</li>
+      <li>Corners use <code>--radius-*</code>. Large surfaces = <code>.card</code> (xl), small surfaces = <code>.tile</code> (md), buttons = sm, badges and chips = pill.</li>
+      <li>Every section starts with a section head: <code>.eyebrow</code> → heading → <code>.sub</code>.</li>
+      <li>Badge = status label (not clickable). Chip = clickable pill. Button = main action.</li>
+    </ul>
+  </section>
+
+  <!-- COLOUR -->
+  <section class="ds-section">
+    <h2 class="h3">Colour</h2>
+    <p class="sub">Brand palette from grampe.co, exposed as semantic tokens.</p>
+    <div class="ds-grid">
+      <div class="swatch"><i style="background:var(--color-primary)"></i><div><b>Primary</b><code>--color-primary</code></div></div>
+      <div class="swatch"><i style="background:var(--color-primary-hover)"></i><div><b>Primary hover</b><code>--color-primary-hover</code></div></div>
+      <div class="swatch"><i style="background:var(--color-primary-soft)"></i><div><b>Primary soft</b><code>--color-primary-soft</code></div></div>
+      <div class="swatch"><i style="background:var(--color-dark)"></i><div><b>Dark (navy)</b><code>--color-dark</code></div></div>
+      <div class="swatch"><i style="background:var(--color-accent)"></i><div><b>Accent (mint)</b><code>--color-accent</code></div></div>
+      <div class="swatch"><i style="background:var(--color-success)"></i><div><b>Success</b><code>--color-success</code></div></div>
+      <div class="swatch"><i style="background:var(--color-success-soft)"></i><div><b>Success soft</b><code>--color-success-soft</code></div></div>
+      <div class="swatch"><i style="background:var(--color-warning)"></i><div><b>Warning</b><code>--color-warning</code></div></div>
+      <div class="swatch"><i style="background:var(--color-danger)"></i><div><b>Danger</b><code>--color-danger</code></div></div>
+      <div class="swatch"><i style="background:var(--color-text)"></i><div><b>Text</b><code>--color-text</code></div></div>
+      <div class="swatch"><i style="background:var(--color-text-muted)"></i><div><b>Text muted</b><code>--color-text-muted</code></div></div>
+      <div class="swatch"><i style="background:var(--color-border)"></i><div><b>Border</b><code>--color-border</code></div></div>
+      <div class="swatch"><i style="background:var(--color-bg)"></i><div><b>Page background</b><code>--color-bg</code></div></div>
+      <div class="swatch"><i style="background:var(--cream-50)"></i><div><b>Cream surface</b><code>--cream-50</code></div></div>
+      <div class="swatch"><i style="background:var(--sky-50)"></i><div><b>Sky surface</b><code>--sky-50</code></div></div>
+      <div class="swatch"><i style="background:var(--violet-50)"></i><div><b>Violet surface</b><code>--violet-50</code></div></div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section class="ds-section">
+    <h2 class="h3">Typography</h2>
+    <p class="sub">Inter. Headings use tight letter-spacing; body text uses 1.5–1.7 line height.</p>
+    <div class="card ds-panel">
+      <div class="type-row"><code>.display</code><span class="display">One Wallet</span></div>
+      <div class="type-row"><code>.h2</code><span class="h2">Section heading</span></div>
+      <div class="type-row"><code>.h3</code><span class="h3">Sub-section heading</span></div>
+      <div class="type-row"><code>.card-title</code><span class="card-title">Card heading</span></div>
+      <div class="type-row"><code>.title</code><span class="title">Card / tile title</span></div>
+      <div class="type-row"><code>.lead</code><span class="lead">Lead paragraph under the hero heading.</span></div>
+      <div class="type-row"><code>.sub</code><span class="sub">Section paragraph text, muted, max 54 characters per line.</span></div>
+      <div class="type-row"><code>.tile-text</code><span class="tile-text">Secondary text inside tiles.</span></div>
+      <div class="type-row"><code>.caption</code><span class="caption">Caption and helper text</span></div>
+      <div class="type-row"><code>.eyebrow</code><span class="eyebrow" style="margin:0">Section label</span></div>
+    </div>
+  </section>
+
+  <!-- SPACING / RADIUS / SHADOW -->
+  <section class="ds-section">
+    <h2 class="h3">Spacing, radius &amp; elevation</h2>
+    <p class="sub">4px spacing scale. Rhythm tokens change at 640px and 960px.</p>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Spacing scale</span>
+      <div style="display:grid;gap:var(--space-2)">
+        <div class="ds-row"><code style="width:90px">--space-1</code><span class="space-bar" style="width:var(--space-1)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-2</code><span class="space-bar" style="width:var(--space-2)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-4</code><span class="space-bar" style="width:var(--space-4)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-6</code><span class="space-bar" style="width:var(--space-6)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-8</code><span class="space-bar" style="width:var(--space-8)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-12</code><span class="space-bar" style="width:var(--space-12)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-16</code><span class="space-bar" style="width:var(--space-16)"></span></div>
+        <div class="ds-row"><code style="width:90px">--space-22</code><span class="space-bar" style="width:var(--space-22)"></span></div>
+      </div>
+    </div>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Radius</span>
+      <div class="ds-row">
+        <div><div class="radius-box" style="border-radius:var(--radius-xs)"></div><code>xs 8</code></div>
+        <div><div class="radius-box" style="border-radius:var(--radius-sm)"></div><code>sm 12</code></div>
+        <div><div class="radius-box" style="border-radius:var(--radius-md)"></div><code>md 16</code></div>
+        <div><div class="radius-box" style="border-radius:var(--radius-lg)"></div><code>lg 20</code></div>
+        <div><div class="radius-box" style="border-radius:var(--radius-xl)"></div><code>xl 28</code></div>
+        <div><div class="radius-box" style="border-radius:var(--radius-pill)"></div><code>pill</code></div>
+      </div>
+    </div>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Elevation</span>
+      <div class="ds-row" style="gap:var(--space-8)">
+        <div><div class="shadow-box" style="box-shadow:var(--shadow-sm)"></div><code>--shadow-sm</code></div>
+        <div><div class="shadow-box" style="box-shadow:var(--shadow-md)"></div><code>--shadow-md</code></div>
+        <div><div class="shadow-box" style="box-shadow:var(--shadow-lg)"></div><code>--shadow-lg</code></div>
+        <div><div class="shadow-box" style="box-shadow:var(--shadow-primary)"></div><code>--shadow-primary</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section class="ds-section">
+    <h2 class="h3">Button</h2>
+    <p class="sub"><code>.btn</code> + one variant + optional size (<code>.btn-sm</code>, <code>.btn-lg</code>, <code>.btn-block</code>).</p>
+    <div class="card ds-panel">
+      <div class="ds-row">
+        <a class="btn btn-primary" href="#">Primary <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a>
+        <a class="btn btn-secondary" href="#">Secondary</a>
+        <a class="btn btn-dark" href="#">Dark</a>
+        <a class="btn btn-primary btn-sm" href="#">Small</a>
+        <a class="btn btn-primary btn-lg" href="#">Large</a>
+      </div>
+      <div class="on-blue ds-row" style="margin-top:var(--space-4)"><a class="btn btn-light" href="#">Light (on blue)</a><a class="btn btn-light btn-sm" href="#">Light small</a></div>
+    </div>
+  </section>
+
+  <!-- BADGES / CHIPS -->
+  <section class="ds-section">
+    <h2 class="h3">Badge &amp; chip</h2>
+    <p class="sub">Badge = status (not clickable). Chip = clickable pill for filters, quick picks and small actions.</p>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Badges</span>
+      <div class="ds-row">
+        <span class="badge badge-primary">UPI</span><span class="badge badge-success">+40 pts</span><span class="badge badge-accent">New</span>
+        <span class="badge badge-dark">GCC</span><span class="badge badge-outline">Outline</span><span class="badge badge-lg badge-success">✓ Payment successful</span>
+      </div>
+      <div class="on-blue ds-row" style="margin-top:var(--space-4)"><span class="badge badge-lg badge-glass">Glass (on blue)</span><span class="badge badge-lg badge-accent">GINR</span></div>
+    </div>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Chips</span>
+      <div class="ds-row">
+        <button class="chip">₹500</button><button class="chip is-active">₹2,000 (active)</button><button class="chip chip-soft">Delhi → Mumbai</button>
+        <button class="chip is-success">Copied</button><button class="chip"><svg class="ico"><use href="assets/img/icons.svg#i-copy"/></svg>Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICON TILE / ICON BUTTON / COIN / AVATAR -->
+  <section class="ds-section">
+    <h2 class="h3">Icon tile, icon button, coin, avatar</h2>
+    <p class="sub">Icon tile: sizes <code>-xs -sm (default) -lg -xl</code>, shape <code>-round</code>, colour <code>.tone-*</code>.</p>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Icon tile sizes</span>
+      <div class="ds-row">
+        <span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>
+        <span class="icon-tile icon-tile-sm tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>
+        <span class="icon-tile tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>
+        <span class="icon-tile icon-tile-lg tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>
+        <span class="icon-tile icon-tile-xl tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg></span>
+      </div>
+      <span class="caption ds-label" style="margin-top:var(--space-5)">Tones</span>
+      <div class="ds-row">
+        <span class="icon-tile tone-primary"><svg class="ico"><use href="assets/img/icons.svg#i-chart"/></svg></span>
+        <span class="icon-tile tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg></span>
+        <span class="icon-tile tone-dark"><svg class="ico"><use href="assets/img/icons.svg#i-grid"/></svg></span>
+        <span class="icon-tile tone-success"><svg class="ico"><use href="assets/img/icons.svg#i-umbrella"/></svg></span>
+        <span class="icon-tile tone-accent"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>
+        <span class="icon-tile tone-warning"><svg class="ico"><use href="assets/img/icons.svg#i-coins"/></svg></span>
+        <span class="icon-tile tone-violet"><svg class="ico"><use href="assets/img/icons.svg#i-layers"/></svg></span>
+        <span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-metro"/></svg></span>
+        <span class="icon-tile tone-white"><svg class="ico"><use href="assets/img/icons.svg#i-star"/></svg></span>
+      </div>
+    </div>
+    <div class="card ds-panel">
+      <span class="caption ds-label">Icon buttons · coins · avatars</span>
+      <div class="ds-row">
+        <button class="icon-btn" aria-label="Next"><svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></button>
+        <button class="icon-btn icon-btn-sm" aria-label="Swap"><svg class="ico"><use href="assets/img/icons.svg#i-swap"/></svg></button>
+        <button class="icon-btn icon-btn-primary" aria-label="Up"><svg class="ico"><use href="assets/img/icons.svg#i-up"/></svg></button>
+        <span style="width:var(--space-6)"></span>
+        <span class="coin coin-upi">₹</span><span class="coin coin-gcc">G</span><span class="coin coin-ginr">₹</span><span class="coin coin-bill"><svg class="ico"><use href="assets/img/icons.svg#i-bolt"/></svg></span>
+        <span style="width:var(--space-6)"></span>
+        <span class="avatar avatar-1">A</span><span class="avatar avatar-2">R</span><span class="avatar avatar-3">S</span><span class="avatar avatar-4">K</span><span class="avatar avatar-5">M</span><span class="avatar avatar-6">P</span><span class="avatar avatar-sm avatar-soft">R</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARD / TILE -->
+  <section class="ds-section">
+    <h2 class="h3">Card &amp; tile</h2>
+    <p class="sub"><code>.card .card-pad</code> for section surfaces. <code>.tile</code> for small items; add <code>.tile-row</code> for horizontal and <code>.tile-link</code> for clickable.</p>
+    <div class="card card-pad">
+      <div class="card-head"><h3 class="card-title">Card title</h3><a class="link" href="#">View all <svg class="ico"><use href="assets/img/icons.svg#i-arrow"/></svg></a></div>
+      <div class="ds-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="tile"><b class="tile-title">Static tile</b><span class="tile-text">Title and supporting text.</span></div>
+        <a class="tile tile-row tile-link" href="#"><span class="icon-tile tone-sky"><svg class="ico"><use href="assets/img/icons.svg#i-metro"/></svg></span><span><b class="tile-title">Link tile</b><small class="tile-text">Hover me</small></span></a>
+        <a class="tile tile-row tile-link" href="#"><span class="icon-tile tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-scan"/></svg></span><span><b class="tile-title">Scan &amp; Pay</b><small class="tile-text">Any QR, any shop</small></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM CONTROLS -->
+  <section class="ds-section">
+    <h2 class="h3">Field &amp; segmented control</h2>
+    <p class="sub"><code>.field</code> shows a label, value and hint. <code>.field-control</code> wraps an input. <code>.segmented</code> switches between 2–4 options.</p>
+    <div class="card ds-panel">
+      <div class="ds-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="field"><small class="field-label">From</small><b class="field-value">Delhi</b><span class="field-hint">DEL · Indira Gandhi Intl</span></div>
+        <div class="field is-flash"><small class="field-label">To (highlighted)</small><b class="field-value">Mumbai</b><span class="field-hint">BOM</span></div>
+        <label><span class="field-label">Amount</span><span class="field field-control"><input type="text" value="10,000" aria-label="Amount"><b>INR</b></span></label>
+      </div>
+      <div class="ds-row" style="margin-top:var(--space-5)">
+        <div class="segmented" role="radiogroup" aria-label="Example"><button type="button" role="radio" aria-checked="true">One way</button><button type="button" role="radio" aria-checked="false">Round trip</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTS -->
+  <section class="ds-section">
+    <h2 class="h3">Check list &amp; live dot</h2>
+    <div class="card ds-panel">
+      <ul class="check-list check-list-2">
+        <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Scan any QR or pay any UPI ID</li>
+        <li><span class="icon-tile icon-tile-xs tone-solid"><svg class="ico"><use href="assets/img/icons.svg#i-check"/></svg></span>Transfer and credit in 30 seconds</li>
+      </ul>
+      <div class="ds-row" style="margin-top:var(--space-5)"><span class="live-dot"></span><span class="caption">Live (success)</span><span class="live-dot live-dot-danger"></span><span class="caption">Live (urgent)</span></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
