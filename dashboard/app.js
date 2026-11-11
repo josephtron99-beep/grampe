@@ -250,6 +250,13 @@
 
   /* ================= PAGES ================= */
 
+  /* ---------- list toolbar helpers: search box, filter select, "no results" ---------- */
+  function searchBox(id, ph) { return '<div class="input-wrap">' + ico("i-search") + '<input class="input" id="' + id + '" type="search" placeholder="' + ph + '" aria-label="' + ph + '" autocomplete="off" spellcheck="false"></div>'; }
+  function selectBox(id, lab, opts, prefix) { return '<select id="' + id + '" aria-label="' + lab + '"' + (prefix ? ' data-prefix="' + prefix + '"' : "") + ">" + opts.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + "</option>"; }).join("") + "</select>"; }
+  function noMatch(t) { return '<div class="empty empty-sm"><span class="icon-tile tone-primary">' + ico("i-search") + '</span><p class="title">' + (t || "No matches") + '</p><p class="body-sm">Try another search or filter.</p></div>'; }
+  function has(obj, q) { return !q || JSON.stringify(obj).toLowerCase().indexOf(q) > -1; }
+  var TX_TYPES = [["all", "All types"], ["receive", "Received"], ["send", "Sent"], ["swap", "Swaps"], ["transfer", "Transfers"], ["upi", "UPI"], ["gift", "Gift cards"]];
+
   /* ---------- HOME ---------- */
   PAGES.home = {
     html: function () {
@@ -276,14 +283,33 @@
         "</div>" +
       "</section>" +
       '<section class="card box"><div class="card-header"><div><h2 class="card-title">Assets</h2><p class="card-desc">Your top holdings by value</p></div><a class="btn btn-ghost btn-sm" href="#/wallet">View all ' + ico("i-arrow") + "</a></div>" +
-        '<div class="rows">' + top.map(assetRow).join("") + "</div></section>" +
+        '<div class="toolbar">' + searchBox("haQ", "Search assets") + selectBox("haNet", "Filter by network", [["all", "All networks"]].concat(D.networks.map(function (n) { return [n.id, n.name]; }))) + "</div>" +
+        '<div class="rows" id="haList"></div></section>' +
       '<section class="card box"><div class="card-header"><div><h2 class="card-title">Recent activity</h2><p class="card-desc">Your latest transactions</p></div><a class="btn btn-ghost btn-sm" href="#/history">See all ' + ico("i-arrow") + "</a></div>" +
-        '<div class="rows">' + S.history.slice(0, 5).map(txRow).join("") + "</div></section>" +
+        '<div class="toolbar">' + searchBox("htQ", "Search activity") + selectBox("htType", "Filter by type", TX_TYPES) + "</div>" +
+        '<div class="rows" id="htList"></div></section>' +
       '<section class="card box"><div class="card-header"><div><h2 class="card-title">Refer a friend</h2><p class="card-desc">Share your link and bring friends to Grampe.</p></div><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
         '<div class="ref-box"><span>' + esc(S.profile.refLink) + '</span><button class="btn btn-secondary btn-sm" data-copy="' + esc(S.profile.refLink) + '" data-what="Referral link">' + ico("i-copy") + "Copy</button></div>" +
         '<div class="ref-actions"><a class="btn btn-ghost btn-sm" href="#/referral">Open Refer ' + ico("i-arrow") + "</a></div></section>";
     },
-    mount: function (v) { countUp($("#heroTotal", v), total()); }
+    mount: function (v) {
+      countUp($("#heroTotal", v), total());
+      var a = { q: "", net: "all" }, t = { q: "", type: "all" };
+      function drawA() {
+        var list = S.assets.filter(function (x) { return (a.net === "all" || x.net === a.net) && has(x.name + " " + label(x) + " " + net(x.net).name, a.q); })
+          .sort(function (x, y) { return y.bal * y.price - x.bal * x.price; }).slice(0, 5);
+        $("#haList", v).innerHTML = list.map(assetRow).join("") || noMatch("No assets found");
+      }
+      function drawT() {
+        var list = S.history.filter(function (x) { return (t.type === "all" || x.type === t.type) && has(x, t.q); }).slice(0, 5);
+        $("#htList", v).innerHTML = list.map(txRow).join("") || noMatch("No activity found");
+      }
+      $("#haQ", v).addEventListener("input", function (e) { a.q = e.target.value.trim().toLowerCase(); drawA(); });
+      $("#haNet", v).addEventListener("change", function (e) { a.net = e.target.value; drawA(); });
+      $("#htQ", v).addEventListener("input", function (e) { t.q = e.target.value.trim().toLowerCase(); drawT(); });
+      $("#htType", v).addEventListener("change", function (e) { t.type = e.target.value; drawT(); });
+      drawA(); drawT();
+    }
   };
   function curToggle() { return '<div class="cur-toggle" role="group" aria-label="Display currency"><button data-cur="INR" aria-pressed="' + (S.cur === "INR") + '">₹ INR</button><button data-cur="USD" aria-pressed="' + (S.cur === "USD") + '">$ USD</button></div>'; }
   function countUp(el, usd) {
@@ -408,20 +434,27 @@
   PAGES.history = {
     html: function () {
       var f = [["all", "All"], ["receive", "Received"], ["send", "Sent"], ["swap", "Swaps"], ["transfer", "Transfers"], ["upi", "UPI"], ["gift", "Gift cards"]];
-      return '<section class="card box"><div class="toolbar"><div class="input-wrap">' + ico("i-search") + '<input class="input" id="hQ" placeholder="Search activity" aria-label="Search activity"></div></div>' +
+      var assets = [];
+      S.history.forEach(function (x) { if (assets.indexOf(x.asset) < 0) assets.push(x.asset); });
+      return '<section class="card box"><div class="toolbar">' + searchBox("hQ", "Search activity") +
+        selectBox("hAsset", "Filter by asset", [["all", "All assets"]].concat(assets.map(function (k) { return [k, k]; }))) +
+        selectBox("hSort", "Sort activity", [["new", "Newest"], ["old", "Oldest"], ["big", "Largest"]], "Sort by") + "</div>" +
         '<div class="chip-row" id="hF">' + f.map(function (x, i) { return '<button class="chip' + (i ? "" : " is-active") + '" data-f="' + x[0] + '">' + x[1] + "</button>"; }).join("") + "</div>" +
         '<div id="hList"></div></section>';
     },
     mount: function (v) {
-      var st = { q: "", f: "all" };
+      var st = { q: "", f: "all", asset: "all", sort: "new" };
       function day(d) { var t = new Date(); t.setHours(0, 0, 0, 0); var x = new Date(d); x.setHours(0, 0, 0, 0); var diff = (t - x) / 864e5; return diff === 0 ? "Today" : diff === 1 ? "Yesterday" : x.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }); }
       function draw() {
-        var list = S.history.filter(function (x) { return (st.f === "all" || x.type === st.f) && (!st.q || JSON.stringify(x).toLowerCase().indexOf(st.q) > -1); });
+        var list = S.history.filter(function (x) { return (st.f === "all" || x.type === st.f) && (st.asset === "all" || x.asset === st.asset) && has(x, st.q); })
+          .slice().sort(function (x, y) { return st.sort === "old" ? new Date(x.date) - new Date(y.date) : st.sort === "big" ? Math.abs(y.amount) - Math.abs(x.amount) : new Date(y.date) - new Date(x.date); });
         var html = "", last = "";
         list.forEach(function (x) { var g = day(x.date); if (g !== last) { last = g; html += '<p class="caption date-group">' + g + "</p>"; } html += txRow(x); });
-        $("#hList", v).innerHTML = html ? '<div class="rows">' + html + "</div>" : '<div class="empty"><span class="icon-tile icon-tile-lg tone-primary">' + ico("i-list") + '</span><p class="title">No activity yet</p><p class="body-sm">Transactions you make will appear here.</p></div>';
+        $("#hList", v).innerHTML = html ? '<div class="rows">' + html + "</div>" : (st.q || st.f !== "all" || st.asset !== "all") ? noMatch("No activity found") : '<div class="empty"><span class="icon-tile icon-tile-lg tone-primary">' + ico("i-list") + '</span><p class="title">No activity yet</p><p class="body-sm">Transactions you make will appear here.</p></div>';
       }
       $("#hQ", v).addEventListener("input", function (e) { st.q = e.target.value.trim().toLowerCase(); draw(); });
+      $("#hAsset", v).addEventListener("change", function (e) { st.asset = e.target.value; draw(); });
+      $("#hSort", v).addEventListener("change", function (e) { st.sort = e.target.value; draw(); });
       $("#hF", v).addEventListener("click", function (e) { var b = e.target.closest("[data-f]"); if (!b) return; st.f = b.dataset.f; $$("[data-f]", v).forEach(function (x) { x.classList.toggle("is-active", x === b); }); draw(); });
       draw();
     }
@@ -739,11 +772,20 @@
       return '<div class="page-head"><div><h2 class="h3">Gift cards</h2><p class="sub">Buy vouchers instantly with your GINR balance.</p></div><div class="segmented" role="radiogroup" aria-label="Gift card view"><button role="radio" aria-checked="' + (p.tab !== "mine") + '" data-gt="shop">Shop</button><button role="radio" aria-checked="' + (p.tab === "mine") + '" data-gt="mine">My gift cards (' + S.gifts.length + ")</button></div></div><div id=\"gBody\"></div>";
     },
     mount: function (v, p) {
-      function shop() {
-        $("#gBody", v).innerHTML = '<div class="gift-grid">' + D.giftCards.map(function (g) { return '<button class="gift" data-g="' + g.id + '"><span class="icon-tile icon-tile-lg ' + g.tone + '">' + ico(g.icon) + '</span><span><b class="title">' + g.name + '</b><br><span class="tile-text">' + g.tag + '</span></span><span class="from">From ₹' + num(g.denoms[0], 0) + " · 0% fee</span></button>"; }).join("") + "</div>";
+      function giftSearch(ph, fill) {
+        $("#gBody", v).innerHTML = '<div class="toolbar">' + searchBox("gQ", ph) + '</div><div id="gList"></div>';
+        var q = $("#gQ", v); q.addEventListener("input", function () { fill(q.value.trim().toLowerCase()); }); fill("");
+      }
+      function shop() { giftSearch("Search gift cards", function (q) { var L = D.giftCards.filter(function (g) { return has(g.name + " " + g.tag, q); }); $("#gList", v).innerHTML = L.length ? shopGrid(L) : noMatch("No gift cards found"); }); }
+      function shopGrid(L) {
+        return '<div class="gift-grid">' + L.map(function (g) { return '<button class="gift" data-g="' + g.id + '"><span class="icon-tile icon-tile-lg ' + g.tone + '">' + ico(g.icon) + '</span><span><b class="title">' + g.name + '</b><br><span class="tile-text">' + g.tag + '</span></span><span class="from">From ₹' + num(g.denoms[0], 0) + " · 0% fee</span></button>"; }).join("") + "</div>";
       }
       function mine() {
-        $("#gBody", v).innerHTML = S.gifts.length ? '<section class="card box"><div class="rows">' + S.gifts.map(function (g) { return '<div class="row-item"><span class="icon-tile tone-warning">' + ico("i-gift") + '</span><span class="row-main"><b>' + g.name + " · ₹" + num(g.value, 0) + "</b><small>Code " + g.code.slice(0, 4) + "••••••" + g.code.slice(-2) + "</small></span><button class=\"chip\" data-copy=\"" + g.code + '" data-what="Gift card code">' + ico("i-copy") + "Copy</button></div>"; }).join("") + "</div></section>"
+        if (S.gifts.length) { giftSearch("Search my gift cards", function (q) { var L = S.gifts.filter(function (g) { return has(g.name + " " + g.value, q); }); $("#gList", v).innerHTML = L.length ? mineList(L) : noMatch("No gift cards found"); }); return; }
+        $("#gBody", v).innerHTML = mineList([]);
+      }
+      function mineList(L) {
+        return L.length ? '<section class="card box"><div class="rows">' + L.map(function (g) { return '<div class="row-item"><span class="icon-tile tone-warning">' + ico("i-gift") + '</span><span class="row-main"><b>' + g.name + " · ₹" + num(g.value, 0) + "</b><small>Code " + g.code.slice(0, 4) + "••••••" + g.code.slice(-2) + "</small></span><button class=\"chip\" data-copy=\"" + g.code + '" data-what="Gift card code">' + ico("i-copy") + "Copy</button></div>"; }).join("") + "</div></section>"
           : '<section class="card box"><div class="empty"><span class="icon-tile icon-tile-lg tone-warning">' + ico("i-gift") + '</span><p class="title">No gift cards yet</p><p class="body-sm">Cards you buy will appear here with their codes.</p><button class="btn btn-primary" data-gt="shop">Browse gift cards</button></div></section>';
       }
       function tab(t) { $$("[data-gt]", v).forEach(function (b) { if (b.getAttribute("role")) b.setAttribute("aria-checked", String(b.dataset.gt === t)); }); t === "mine" ? mine() : shop(); }
@@ -794,7 +836,22 @@
         '<ol class="stack" style="margin-top:24px">' + [["Share your link", "Send it to friends on any app"], ["They sign up", "Free to join, takes 2 minutes"], ["You both earn", "Points land after verification"]].map(function (s, i) { return '<li class="tile tile-row"><b class="icon-tile icon-tile-sm icon-tile-round tone-primary">' + (i + 1) + '</b><span><b class="tile-title">' + s[0] + '</b><span class="tile-text">' + s[1] + "</span></span></li>"; }).join("") + "</ol></section>" +
         refList() + "</div>";
     },
-    mount: function (v) { $("#refShare", v).addEventListener("click", function () { share(S.profile.refLink, "Join me on Grampe"); }); }
+    mount: function (v) {
+      $("#refShare", v).addEventListener("click", function () { share(S.profile.refLink, "Join me on Grampe"); });
+      var box = $("#rfList", v); if (!box) return;
+      var rows = $$(".ref-row", box), R = D.referrals, st = { q: "", status: "all", sort: "new" };
+      function draw() {
+        var order = R.map(function (r, i) { return i; }).filter(function (i) { var r = R[i]; return (st.status === "all" || r.status === st.status) && has(r.name + " " + r.id, st.q); })
+          .sort(function (a, b) { return st.sort === "name" ? R[a].name.localeCompare(R[b].name) : st.sort === "old" ? R[a].joined.localeCompare(R[b].joined) : R[b].joined.localeCompare(R[a].joined); });
+        rows.forEach(function (el) { el.remove(); });
+        var e = $(".empty", box); if (e) e.remove();
+        order.forEach(function (i) { box.appendChild(rows[i]); });
+        if (!order.length) box.insertAdjacentHTML("beforeend", noMatch("No referrals found"));
+      }
+      $("#rfQ", v).addEventListener("input", function (e) { st.q = e.target.value.trim().toLowerCase(); draw(); });
+      $("#rfStatus", v).addEventListener("change", function (e) { st.status = e.target.value; draw(); });
+      $("#rfSort", v).addEventListener("change", function (e) { st.sort = e.target.value; draw(); });
+    }
   };
 
   /* referral list: people who joined with this user's link */
@@ -803,9 +860,12 @@
     var R = D.referrals || [], ok = R.filter(function (r) { return r.status === "Verified"; }).length;
     var avs = ["avatar-1", "avatar-2", "avatar-3", "avatar-4", "avatar-5"];
     return '<section class="card box"><div class="card-header"><div><h2 class="card-title">Your referrals</h2><p class="card-desc">' + R.length + " joined · " + ok + ' verified</p></div><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
-      (R.length ? '<div class="rows">' + R.map(function (r, i) {
+      (R.length ? '<div class="toolbar">' + searchBox("rfQ", "Search name or user ID") +
+        selectBox("rfStatus", "Filter by status", [["all", "All status"], ["Verified", "Verified"], ["Pending", "Pending"]]) +
+        selectBox("rfSort", "Sort referrals", [["new", "Newest"], ["old", "Oldest"], ["name", "Name"]], "Sort by") + "</div>" +
+        '<div class="rows" id="rfList">' + R.map(function (r, i) {
         var ini = r.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
-        return '<div class="row-item ref-row"><span class="avatar avatar-sm ' + avs[i % 5] + '">' + ini + '</span><span class="row-main"><b>' + esc(r.name) + "</b><small>User ID " + esc(r.id) + " · Joined " + fmtDate(r.joined) + '</small></span><span class="badge ' + (r.status === "Verified" ? "badge-success" : "badge-outline") + '">' + r.status + "</span></div>";
+        return '<div class="row-item ref-row" data-i="' + i + '"><span class="avatar avatar-sm ' + avs[i % 5] + '">' + ini + '</span><span class="row-main"><b>' + esc(r.name) + "</b><small>User ID " + esc(r.id) + " · Joined " + fmtDate(r.joined) + '</small></span><span class="badge ' + (r.status === "Verified" ? "badge-success" : "badge-outline") + '">' + r.status + "</span></div>";
       }).join("") + "</div>"
       : '<div class="empty"><span class="icon-tile icon-tile-lg tone-primary">' + ico("i-users") + '</span><p class="title">No referrals yet</p><p class="body-sm">Friends who join with your link will appear here.</p></div>') +
       "</section>";
@@ -900,7 +960,18 @@
   }
   function notifPanel() {
     $(".tb-dot") && $(".tb-dot").remove();
-    openPanel({ type: "drawer", title: "Notifications", html: '<div class="rows">' + D.notifications.map(function (n) { return '<div class="row-item"><span class="icon-tile ' + n.tone + '">' + ico(n.icon) + '</span><span class="row-main"><b>' + n.title + "</b><small>" + n.text + '</small></span><span class="caption">' + n.time + "</span></div>"; }).join("") + "</div>" });
+    var kind = function (n) { return /receive|swap|send|users|bolt/.test(n.icon) ? "money" : "updates"; }, st = { q: "", k: "all" };
+    openPanel({ type: "drawer", title: "Notifications",
+      html: '<div class="toolbar">' + searchBox("nQ", "Search notifications") + '</div><div class="chip-row" id="nF"><button class="chip is-active" data-k="all">All</button><button class="chip" data-k="money">Transactions</button><button class="chip" data-k="updates">Updates</button></div><div class="rows" id="nList"></div>',
+      mount: function (b) {
+        function draw() {
+          var L = D.notifications.filter(function (n) { return (st.k === "all" || kind(n) === st.k) && has(n.title + " " + n.text, st.q); });
+          $("#nList", b).innerHTML = L.map(function (n) { return '<div class="row-item"><span class="icon-tile ' + n.tone + '">' + ico(n.icon) + '</span><span class="row-main"><b>' + n.title + "</b><small>" + n.text + '</small></span><span class="caption">' + n.time + "</span></div>"; }).join("") || noMatch("No notifications found");
+        }
+        $("#nQ", b).addEventListener("input", function (e) { st.q = e.target.value.trim().toLowerCase(); draw(); });
+        $("#nF", b).addEventListener("click", function (e) { var c = e.target.closest("[data-k]"); if (!c) return; st.k = c.dataset.k; $$("[data-k]", b).forEach(function (x) { x.classList.toggle("is-active", x === c); }); draw(); });
+        draw();
+      } });
   }
 
   function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "../index.html"; }); }

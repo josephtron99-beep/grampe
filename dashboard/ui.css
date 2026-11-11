@@ -394,3 +394,21 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
 .ui .ref-row:hover { background: none; }
 .joined-line { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; color: var(--color-success); }
 .joined-line .ico { width: 13px; height: 13px; }
+
+/* ---------- list toolbars (search + filters) ---------- */
+.ui .toolbar .input-wrap { flex: 1 1 200px; }
+.ui .toolbar .select { flex: none; }
+.ui .card-header + .toolbar { margin-top: -4px; }
+.ui .input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
+.ui .empty-sm { padding: 24px 16px; gap: 8px; }
+.ui .empty-sm .title { font-size: 14px; }
+@media (max-width: 479px) {
+  .ui .toolbar .input-wrap { flex-basis: 100%; }
+  .ui .toolbar .select { flex: 1 1 calc(50% - 4px); }
+}
+@media (max-width: 479px) {
+  .ui .toolbar .select { min-width: 0; }
+  .ui .toolbar .select-trigger { min-width: 0; overflow: hidden; }
+  .ui .toolbar .select-menu { min-width: 180px; }
+  .ui .toolbar .select:last-child .select-menu { left: auto; right: 0; }
+}
