@@ -8,7 +8,7 @@
   "use strict";
 
   var D = window.GRAMPE_DEMO;
-  var ICON = "../assets/img/icons.svg#";
+  var ICON = "../../assets/img/icons.svg#";
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -183,7 +183,7 @@
       mm += '<p class="m-group">' + g[0] + "</p>";
       g[1].forEach(function (id) { var r = R(id); mm += '<a href="#/' + id + '" data-m="' + id + '" style="--i:' + (i++) + '"><span class="icon-tile tone-primary">' + ico(r.icon) + "</span>" + r.title + "</a>"; });
     });
-    mm += '<p class="m-group">Session</p><a href="../dashboard/" style="--i:' + (i++) + '"><span class="icon-tile tone-sky">' + ico("i-sidebar") + '</span>Switch to V1</a><button data-action="logout" style="--i:' + i + '"><span class="icon-tile tone-dark">' + ico("i-logout") + "</span>Log out</button>";
+    mm += '<p class="m-group">Session</p><a href="../" style="--i:' + (i++) + '"><span class="icon-tile tone-sky">' + ico("i-sidebar") + '</span>Switch to V1</a><button data-action="logout" style="--i:' + i + '"><span class="icon-tile tone-dark">' + ico("i-logout") + "</span>Log out</button>";
     $("#mMenuNav").innerHTML = mm;
   }
   function groupOf(id) { var g = NAV.filter(function (n) { return n.id === id || (n.kids && n.kids.some(function (k) { return k[0] === id; })); })[0]; return g ? g.id : null; }
@@ -311,7 +311,7 @@
           return '<button class="mkt-row" data-asset="' + key(a) + '">' + coin(a, "") + '<span class="row-main"><b>' + label(a) + "</b><small>$" + (a.price < 1 ? a.price.toFixed(4) : num(a.price, 2)) + "</small></span>" + spark(a) + '<span class="row-end"><b>' + m(num(a.bal, a.dp > 2 ? 3 : 2)) + "</b><small>" + chg(a.change) + "</small></span></button>";
         }).join("") + "</div></article>" +
         '<article class="card b-box b-act"><h2 class="b-title">Activity <a class="link" href="#/history">See all ' + ico("i-arrow") + '</a></h2><div class="rows timeline">' + S.history.slice(0, 5).map(txRow).join("") + "</div></article>" +
-        '<article class="card b-box b-card"><h2 class="b-title">RuPay card <span class="badge badge-primary">Soon</span></h2><a href="#/cards" class="holo-wrap" aria-label="Open card"><div class="holo" id="holoMini"><div class="vtop"><span><img src="../assets/img/shield.svg" alt="" width="18" height="20">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum">•••• 4821</p></div></a></article>' +
+        '<article class="card b-box b-card"><h2 class="b-title">RuPay card <span class="badge badge-primary">Soon</span></h2><a href="#/cards" class="holo-wrap" aria-label="Open card"><div class="holo" id="holoMini"><div class="vtop"><span><img src="../../assets/img/shield.svg" alt="" width="18" height="20">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum">•••• 4821</p></div></a></article>' +
         '<article class="card b-box b-ref"><h2 class="b-title">Refer &amp; earn <span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + '</span></h2><p class="body-sm">Invite friends to Grampe and collect reward points when they verify.</p><div class="ref-link" style="margin-top:16px"><span>' + esc(S.profile.refLink) + '</span><button class="chip" data-copy="' + esc(S.profile.refLink) + '" data-what="Referral link">' + ico("i-copy") + 'Copy</button></div><div class="cta-row" style="margin-top:16px"><a class="btn btn-primary btn-sm" href="#/referral">' + ico("i-share") + 'Share</a><a class="btn btn-secondary btn-sm" href="#/gifts">' + ico("i-gift") + "Gift cards</a></div></article>" +
       "</section>";
     },
@@ -733,7 +733,7 @@
       return '<div class="page-head"><div><h2 class="h3">RuPay virtual card</h2><p class="sub">Spend your GINR anywhere RuPay is accepted.</p></div><span class="badge badge-lg badge-primary">Coming soon</span></div>' +
         '<div class="grid-2">' +
           '<section class="card box"><div class="vcard-wrap"><div class="vcard' + (c.frozen ? " frozen" : "") + '" id="vcard" role="button" tabindex="0" aria-label="Flip card">' +
-            '<div class="vface"><div class="vtop"><span><img src="../assets/img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum" id="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
+            '<div class="vface"><div class="vtop"><span><img src="../../assets/img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum" id="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
             '<div class="vface back"><div class="vstripe"></div><div class="vcvv"><span class="caption">CVV</span><b id="vcvv">•••</b></div><p class="caption" style="color:var(--navy-300);margin-top:auto">Virtual card · demo details</p></div>' +
           "</div></div>" +
           '<div class="cta-row" style="justify-content:center"><button class="btn btn-secondary btn-sm" id="cReveal">' + ico("i-eye") + '<span>Show details</span></button><button class="btn btn-secondary btn-sm" id="cFlip">' + ico("i-refresh") + 'Flip</button><button class="btn btn-secondary btn-sm" id="cCopy" disabled>' + ico("i-copy") + "Copy number</button></div>" +
@@ -969,7 +969,7 @@
   palList.addEventListener("click", function (e) { var li = e.target.closest("[data-i]"); if (li) palRun(+li.dataset.i); });
   pal.addEventListener("click", function (e) { if (e.target === pal) palClose(); });
 
-  function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "../index.html"; }); }
+  function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "../../index.html"; }); }
 
   /* ---------- global events ---------- */
   document.addEventListener("click", function (e) {

@@ -34,8 +34,8 @@ Signed-in wallet app built on the same design system. Open `dashboard/index.html
 - Not connected to the backend: balances, history and fees are fictional and saved in the browser (`localStorage`). Replace `data.js` and the flow handlers in `app.js` with API calls to go live.
 - Extras: Ctrl K command palette, hide balances, INR/USD, collapsible sidebar, bottom tab bar + quick-action button on phones.
 
-## Dashboard V2 (`/dashboard-v2`)
-Same pages, data and flows as V1 with a completely different look: dark "Night" theme (`data-theme="night"` in `tokens.css`), glass top menu with mega menus, bento home (rolling balance, allocation donut, market sparklines, activity timeline, holographic card), asset-card wallet, intro splash and mesh background. Uses `../dashboard/data.js` and the shared page patterns in `../dashboard/dashboard.css`; its own styles are in `v2.css`. Switch between versions from the user menu.
+## Dashboard V2 (`/dashboard/v2`)
+Same pages, data and flows as V1 with a completely different look: dark "Night" theme (`data-theme="night"` in `tokens.css`), glass top menu with mega menus, bento home (rolling balance, allocation donut, market sparklines, activity timeline, holographic card), asset-card wallet, intro splash and mesh background. Uses `../data.js` and the shared page patterns in `../dashboard.css`; its own styles are in `v2.css`. Switch between versions from the user menu.
 
 Asset links carry a `?v=` tag; bump it in both dashboard `index.html` files when you release CSS/JS changes so browsers fetch fresh files.
 
