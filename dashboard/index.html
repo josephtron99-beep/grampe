@@ -8,17 +8,17 @@
   <meta name="description" content="Grampe wallet dashboard: balances, assets, activity, swap, RuPay card, staking and referrals.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0500FF">
-  <link rel="icon" href="../assets/img/favicon.png" type="image/png" sizes="48x48">
-  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
+  <link rel="icon" href="img/favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Design system: tokens → components → page -->
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261112j">
-  <link rel="stylesheet" href="../assets/css/components.css?v=20261112j">
-  <link rel="stylesheet" href="dashboard.css?v=20261112j">
+  <link rel="stylesheet" href="css/tokens.css?v=20261112k">
+  <link rel="stylesheet" href="css/components.css?v=20261112k">
+  <link rel="stylesheet" href="css/dashboard.css?v=20261112k">
   <!-- shadcn/ui component layer (Grampe colours) -->
-  <link rel="stylesheet" href="ui.css?v=20261112j">
+  <link rel="stylesheet" href="css/ui.css?v=20261112k">
 </head>
 <body class="app-body ui">
 
@@ -28,18 +28,18 @@
   <aside class="sidebar" id="sidebar" aria-label="Dashboard navigation">
     <div class="sb-head">
       <a href="#/home" class="sb-brand" aria-label="Grampe dashboard home">
-        <img class="sb-logo-img" src="../assets/img/grampe-logo.png" alt="Grampe" width="194" height="44">
+        <img class="sb-logo-img" src="img/grampe-logo.png" alt="Grampe" width="194" height="44">
       </a>
-      <button class="icon-btn icon-btn-sm sb-close" data-action="sb-close" aria-label="Close menu"><svg class="ico"><use href="../assets/img/icons.svg#i-x"/></svg></button>
+      <button class="icon-btn icon-btn-sm sb-close" data-action="sb-close" aria-label="Close menu"><svg class="ico"><use href="img/icons.svg#i-x"/></svg></button>
     </div>
     <nav class="sb-content" id="sbNav"><!-- built by app.js --></nav>
     <div class="sb-foot">
       <div class="sb-help-card">
         <b>Need help?</b>
         <small>Our team answers on Telegram.</small>
-        <a class="btn btn-secondary btn-sm" style="width:100%" href="https://t.me/GramchainNetwork" target="_blank" rel="noopener"><svg class="ico"><use href="../assets/img/icons.svg#i-tg"/></svg>Chat on Telegram</a>
+        <a class="btn btn-secondary btn-sm" style="width:100%" href="https://t.me/GramchainNetwork" target="_blank" rel="noopener"><svg class="ico"><use href="img/icons.svg#i-tg"/></svg>Chat on Telegram</a>
       </div>
-      <button class="sb-btn danger" data-action="logout"><svg class="ico"><use href="../assets/img/icons.svg#i-logout"/></svg><span>Log out</span></button>
+      <button class="sb-btn danger" data-action="logout"><svg class="ico"><use href="img/icons.svg#i-logout"/></svg><span>Log out</span></button>
     </div>
   </aside>
   <div class="sb-backdrop" data-action="sb-close" aria-hidden="true"></div>
@@ -47,18 +47,18 @@
   <!-- ============ MAIN ============ -->
   <div class="main">
     <header class="topbar" id="topbar">
-      <button class="icon-btn icon-btn-sm hd-trigger" data-action="sb-open" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg class="ico"><use href="../assets/img/icons.svg#i-sidebar"/></svg></button>
+      <button class="icon-btn icon-btn-sm hd-trigger" data-action="sb-open" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg class="ico"><use href="img/icons.svg#i-sidebar"/></svg></button>
       <span class="hd-sep" aria-hidden="true"></span>
-      <nav class="crumbs" aria-label="Breadcrumb"><span id="tbCrumb">Overview</span><svg class="ico" style="transform:rotate(-90deg)"><use href="../assets/img/icons.svg#i-chevron-down"/></svg><b id="tbTitle" aria-current="page">Home</b></nav>
+      <nav class="crumbs" aria-label="Breadcrumb"><span id="tbCrumb">Overview</span><svg class="ico" style="transform:rotate(-90deg)"><use href="img/icons.svg#i-chevron-down"/></svg><b id="tbTitle" aria-current="page">Home</b></nav>
       <div class="hd-right">
-        <button class="icon-btn icon-btn-sm tb-icon" id="openNotif" aria-label="Notifications"><svg class="ico"><use href="../assets/img/icons.svg#i-bell"/></svg><i class="tb-dot"></i></button>
+        <button class="icon-btn icon-btn-sm tb-icon" id="openNotif" aria-label="Notifications"><svg class="ico"><use href="img/icons.svg#i-bell"/></svg><i class="tb-dot"></i></button>
         <div class="hd-user">
           <button class="hd-avatar" id="userBtn" aria-label="Account menu" aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu"><span id="userInitials">AM</span></button>
           <div class="menu" id="userMenu" role="menu" hidden>
             <div class="menu-label"><b id="userName">Aarav Mehta</b><small id="userId">ID 100245</small></div>
             <hr>
-            <a role="menuitem" href="#/profile"><svg class="ico"><use href="../assets/img/icons.svg#i-user"/></svg>My profile</a>
-            <button role="menuitem" data-action="logout" class="menu-danger"><svg class="ico"><use href="../assets/img/icons.svg#i-logout"/></svg>Log out</button>
+            <a role="menuitem" href="#/profile"><svg class="ico"><use href="img/icons.svg#i-user"/></svg>My profile</a>
+            <button role="menuitem" data-action="logout" class="menu-danger"><svg class="ico"><use href="img/icons.svg#i-logout"/></svg>Log out</button>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@
 <!-- shared overlay host (modal / drawer / sheet) -->
 <div class="overlay" id="overlay" aria-hidden="true">
   <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
-    <div class="panel-head"><h2 id="panelTitle">Title</h2><button class="icon-btn icon-btn-sm" data-action="close" aria-label="Close"><svg class="ico"><use href="../assets/img/icons.svg#i-x"/></svg></button></div>
+    <div class="panel-head"><h2 id="panelTitle">Title</h2><button class="icon-btn icon-btn-sm" data-action="close" aria-label="Close"><svg class="ico"><use href="img/icons.svg#i-x"/></svg></button></div>
     <div class="panel-body" id="panelBody"></div>
   </div>
 </div>
@@ -79,7 +79,7 @@
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
-<script src="data.js?v=20261112j" defer></script>
-<script src="app.js?v=20261112j" defer></script>
+<script src="js/data.js?v=20261112k" defer></script>
+<script src="js/app.js?v=20261112k" defer></script>
 </body>
 </html>

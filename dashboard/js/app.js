@@ -8,7 +8,7 @@
   "use strict";
 
   var D = window.GRAMPE_DEMO;
-  var ICON = "../assets/img/icons.svg#";
+  var ICON = "img/icons.svg#";
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -266,7 +266,7 @@
       var today = new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
       return '' +
       '<section class="welcome" aria-labelledby="wlTitle">' +
-        '<img class="wl-mark" src="../assets/img/shield.svg" alt="" width="92" height="104">' +
+        '<img class="wl-mark" src="img/shield.svg" alt="" width="92" height="104">' +
         '<div class="wl-top"><span class="wl-badge"><i></i>' + today + "</span>" + curToggle() + "</div>" +
         '<h1 id="wlTitle">' + greet() + ", " + esc(S.profile.name.split(" ")[0]) + " 👋</h1>" +
         '<p class="wl-sub">Welcome back to Grampe. Your crypto and GINR in one safe place: send, swap and pay in seconds.</p>' +
@@ -716,7 +716,7 @@
       var c = S.card;
       return '<section class="card box soon-hero">' +
           '<div class="vcard-wrap"><div class="vcard" id="vcard" role="button" tabindex="0" aria-label="Flip card">' +
-            '<div class="vface"><div class="vtop"><span><img src="../assets/img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
+            '<div class="vface"><div class="vtop"><span><img src="img/shield.svg" alt="" width="20" height="22">Gram Chain</span><span class="vnet">RuPay</span></div><div class="vchip"></div><p class="vnum">6254 •••• •••• 4821</p><div class="vbot"><span>' + esc(S.profile.name.toUpperCase()) + "</span><span>VALID 12/29</span></div></div>" +
             '<div class="vface back"><div class="vstripe"></div><div class="vcvv"><span class="caption">CVV</span><b>•••</b></div><p class="caption" style="color:var(--navy-300);margin-top:auto">Virtual card preview</p></div>' +
           "</div></div>" +
           '<span class="badge badge-primary soon-badge">Coming soon</span>' +
@@ -974,7 +974,7 @@
       } });
   }
 
-  function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "../index.html"; }); }
+  function logout() { confirmBox("Log out?", "You'll return to the Grampe home page.", "Log out", function () { location.href = "https://www.grampe.co/"; }); }
 
   /* ---------- global events ---------- */
   document.addEventListener("click", function (e) {

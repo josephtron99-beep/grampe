@@ -27,15 +27,23 @@ Open http://localhost:5510
 3. Deploy.
 
 ## Dashboard (`/dashboard`)
-Signed-in wallet app built on the same design system. Open `dashboard/index.html` (locally: http://localhost:5510/dashboard/).
-- `index.html` app shell · `dashboard.css` layout · `ui.css` shadcn/ui-style component layer (shadcn spacing, radius, shadows and focus rings; Grampe colours only) · `app.js` router, pages and flows · `data.js` **demo data**
-- Sidebar: Home, Wallet, Products (Swap, RuPay card, Staking, Refer), Need help (Telegram), Log out. Header: breadcrumb, notifications, profile menu (My profile, Log out). Content is centred at 800px max.
+Signed-in wallet app. **The folder is self-contained**: copy `dashboard/` anywhere (or deploy it on its own) and it works with no other files.
+```
+dashboard/
+  index.html            app shell (sidebar, header, overlays)
+  css/tokens.css        design tokens (copy of assets/css/tokens.css)
+  css/components.css    shared components (copy of assets/css/components.css)
+  css/dashboard.css     dashboard layout + page patterns
+  css/ui.css            shadcn/ui-style component layer (Grampe colours only)
+  js/data.js            demo data
+  js/app.js             router, pages and flows
+  img/                  logo, favicon, shield, icons.svg sprite
+```
 - Pages (hash links): `#/home` `#/wallet` `#/history` `#/send` `#/receive` `#/swap` `#/transfer` `#/upi` `#/cards` `#/staking` `#/gifts` `#/referral` `#/profile` `#/security`
-- Mirrors the live grampe.co wallet: 9 assets, 7 networks, swap rule (GCC only from USDT), UPI with OTP, RuPay virtual card, gift cards, profile, password.
-- Not connected to the backend: balances, history and fees are fictional and saved in the browser (`localStorage`). Replace `data.js` and the flow handlers in `app.js` with API calls to go live.
-- Extras: hide balances, INR/USD, sidebar opens as a sheet on phones.
-
-Asset links in `dashboard/index.html` carry a `?v=` tag; bump it when you release CSS/JS changes so browsers fetch fresh files.
+- Sidebar: Menu (Home, Wallet) and Products (Swap, RuPay card, Transfer, Refer), Need help (Telegram), Log out. Content is centred at 800px max.
+- Every list has search and filters. Not connected to the backend: balances, history and referrals are demo data saved in the browser (`localStorage`). Replace `js/data.js` and the flow handlers in `js/app.js` with API calls to go live.
+- `css/tokens.css` and `css/components.css` are copies; if you change the site's versions, copy them here again.
+- Asset links in `dashboard/index.html` carry a `?v=` tag; bump it when you release CSS/JS changes.
 
 ## Design system
 Every page loads `tokens.css` → `components.css` → its own page file (e.g. `home.css`).
