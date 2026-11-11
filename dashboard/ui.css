@@ -388,3 +388,9 @@ body.ui :focus-visible { outline: none; box-shadow: var(--ui-ring); border-radiu
 /* big amount fields keep their size (swap, send, transfer, UPI) */
 .ui .swap-side .input { min-height: 44px; font-size: 28px; font-weight: var(--fw-semibold); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 @media (max-width: 479px) { .ui .swap-side .input { font-size: 24px; } }
+
+/* referral list + joined date */
+.ui .ref-row { cursor: default; }
+.ui .ref-row:hover { background: none; }
+.joined-line { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; color: var(--color-success); }
+.joined-line .ico { width: 13px; height: 13px; }

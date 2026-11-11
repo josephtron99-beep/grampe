@@ -4,7 +4,16 @@
    responses when the dashboard is connected to the backend.
    ========================================================== */
 window.GRAMPE_DEMO = {
-  user: { id: "100245", name: "Aarav Mehta", first: "Aarav", email: "aarav@example.com", mobile: "98765 43210", country: "India", code: "+91", refLink: "https://www.grampe.co/signup.html?Ref=100245" },
+  user: { id: "100245", name: "Aarav Mehta", first: "Aarav", email: "aarav@example.com", mobile: "98765 43210", country: "India", code: "+91", refLink: "https://www.grampe.co/signup.html?Ref=100245", joined: "2025-03-14" },
+
+  /* people who joined with the user's referral link (demo) */
+  referrals: [
+    { id: "100377", name: "Rohan Sharma", joined: "2026-11-08", status: "Verified" },
+    { id: "100362", name: "Priya Nair", joined: "2026-10-27", status: "Verified" },
+    { id: "100351", name: "Karan Patel", joined: "2026-10-19", status: "Pending" },
+    { id: "100318", name: "Sneha Iyer", joined: "2026-09-30", status: "Verified" },
+    { id: "100296", name: "Vikram Das", joined: "2026-09-12", status: "Verified" }
+  ],
 
   usdInr: 83.2,
 

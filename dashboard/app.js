@@ -792,19 +792,34 @@
         '<div class="ref-link" style="margin-top:20px"><span>' + esc(l) + '</span><button class="chip" data-copy="' + esc(l) + '" data-what="Referral link">' + ico("i-copy") + "Copy</button></div>" +
         '<div class="grid-2" style="grid-template-columns:1fr 1fr;margin-top:12px"><button class="btn btn-primary" id="refShare">' + ico("i-share") + 'Share link</button><a class="btn btn-secondary" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Join me on Grampe: " + l) + '">WhatsApp</a></div>' +
         '<ol class="stack" style="margin-top:24px">' + [["Share your link", "Send it to friends on any app"], ["They sign up", "Free to join, takes 2 minutes"], ["You both earn", "Points land after verification"]].map(function (s, i) { return '<li class="tile tile-row"><b class="icon-tile icon-tile-sm icon-tile-round tone-primary">' + (i + 1) + '</b><span><b class="tile-title">' + s[0] + '</b><span class="tile-text">' + s[1] + "</span></span></li>"; }).join("") + "</ol></section>" +
-        '<section class="card box" style="text-align:center"><p class="input-label">Scan to join</p><div class="qr-box" style="margin-top:12px">' + qr(l) + '</div><p class="caption" style="margin-top:12px">Your referral ID · ' + esc(S.profile.id) + "</p></section></div>";
+        refList() + "</div>";
     },
     mount: function (v) { $("#refShare", v).addEventListener("click", function () { share(S.profile.refLink, "Join me on Grampe"); }); }
   };
+
+  /* referral list: people who joined with this user's link */
+  function fmtDate(iso) { var d = new Date(iso + "T00:00:00"); return isNaN(d) ? iso : d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
+  function refList() {
+    var R = D.referrals || [], ok = R.filter(function (r) { return r.status === "Verified"; }).length;
+    var avs = ["avatar-1", "avatar-2", "avatar-3", "avatar-4", "avatar-5"];
+    return '<section class="card box"><div class="card-header"><div><h2 class="card-title">Your referrals</h2><p class="card-desc">' + R.length + " joined · " + ok + ' verified</p></div><span class="icon-tile icon-tile-sm tone-success">' + ico("i-users") + "</span></div>" +
+      (R.length ? '<div class="rows">' + R.map(function (r, i) {
+        var ini = r.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
+        return '<div class="row-item ref-row"><span class="avatar avatar-sm ' + avs[i % 5] + '">' + ini + '</span><span class="row-main"><b>' + esc(r.name) + "</b><small>User ID " + esc(r.id) + " · Joined " + fmtDate(r.joined) + '</small></span><span class="badge ' + (r.status === "Verified" ? "badge-success" : "badge-outline") + '">' + r.status + "</span></div>";
+      }).join("") + "</div>"
+      : '<div class="empty"><span class="icon-tile icon-tile-lg tone-primary">' + ico("i-users") + '</span><p class="title">No referrals yet</p><p class="body-sm">Friends who join with your link will appear here.</p></div>') +
+      "</section>";
+  }
 
   /* ---------- PROFILE ---------- */
   var COUNTRIES = [["India", "+91"], ["United Arab Emirates", "+971"], ["United States", "+1"], ["United Kingdom", "+44"], ["Singapore", "+65"], ["Nepal", "+977"], ["Bangladesh", "+880"], ["Sri Lanka", "+94"]];
   PAGES.profile = {
     html: function () {
       var p = S.profile, ini = p.name.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
-      return '<section class="card box"><div class="profile-head"><span class="avatar avatar-5">' + ini + '</span><div><p class="title title-lg">' + esc(p.name) + '</p><p class="caption">User ID ' + p.id + ' <button class="link" data-copy="' + p.id + '" data-what="User ID" style="margin:0 0 0 6px;padding:0">Copy</button></p></div></div>' +
+      return '<section class="card box"><div class="profile-head"><span class="avatar avatar-5">' + ini + '</span><div><p class="title title-lg">' + esc(p.name) + '</p><p class="caption">User ID ' + p.id + ' <button class="link" data-copy="' + p.id + '" data-what="User ID" style="margin:0 0 0 6px;padding:0">Copy</button></p><p class="caption joined-line">' + ico("i-check") + "Member since " + fmtDate(p.joined || D.user.joined) + "</p></div></div>" +
         '<form class="form-grid form-grid-2" id="pf" novalidate>' +
           '<div class="input-group"><label class="input-label" for="pId">User ID</label><div class="input-wrap" style="background:var(--color-bg)"><input class="input" id="pId" value="' + p.id + '" readonly></div></div>' +
+          '<div class="input-group"><label class="input-label" for="pJoined">Joined date</label><div class="input-wrap" style="background:var(--color-bg)"><input class="input" id="pJoined" value="' + fmtDate(p.joined || D.user.joined) + '" readonly></div></div>' +
           '<div class="input-group"><label class="input-label" for="pName">Full name</label><div class="input-wrap"><input class="input" id="pName" value="' + esc(p.name) + '" autocomplete="name" required></div></div>' +
           '<div class="input-group"><label class="input-label" for="pCountry">Country</label><div class="input-wrap"><select class="input" id="pCountry">' + COUNTRIES.map(function (c) { return '<option value="' + c[0] + '" data-code="' + c[1] + '"' + (c[0] === p.country ? " selected" : "") + ">" + c[0] + " (" + c[1] + ")</option>"; }).join("") + "</select></div></div>" +
           '<div class="input-group"><label class="input-label" for="pMobile">Mobile</label><div class="input-wrap"><span class="input-addon" id="pCode">' + p.code + '</span><input class="input" id="pMobile" value="' + esc(p.mobile) + '" inputmode="tel" autocomplete="tel"></div></div>' +
